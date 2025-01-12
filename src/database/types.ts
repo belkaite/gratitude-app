@@ -5,9 +5,26 @@ export type Generated<T> =
     ? ColumnType<S, I | undefined, U>
     : ColumnType<T, T | undefined, T>
 
+export type Timestamp = ColumnType<Date, Date | string, Date | string>
+
 export interface Level {
   id: Generated<number>
   name: string
+  order: number
+}
+
+export interface Note {
+  content: string
+  createdAt: Generated<Timestamp>
+  id: Generated<number>
+  levelId: number
+  userId: number
+}
+
+export interface ScientificTip {
+  content: string
+  id: Generated<number>
+  levelId: number
   order: number
 }
 
@@ -22,5 +39,7 @@ export interface User {
 
 export interface DB {
   level: Level
+  note: Note
+  scientificTip: ScientificTip
   user: User
 }
