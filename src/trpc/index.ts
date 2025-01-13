@@ -20,7 +20,7 @@ export type Context = {
   // authUser?: AuthUser
 
   // For providing repos in a slightly easier to test way
-  // repos?: Partial<Repositories>
+  repos?: Partial<Repositories>
 }
 
 export type ContextMinimal = Pick<Context, 'db'>
