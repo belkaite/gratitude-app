@@ -5,7 +5,7 @@ import type { Database } from '@server/database'
 import SuperJSON from 'superjson'
 import { ZodError } from 'zod'
 import { fromZodError } from 'zod-validation-error'
-// import type { Repositories } from '@server/repositories'
+import type { Repositories } from '@server/repositories'
 
 export type Context = {
   db: Database
