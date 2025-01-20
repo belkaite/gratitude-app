@@ -2,6 +2,8 @@ import { publicProcedure } from '@server/trpc'
 import provideRepos from '@server/trpc/provideRepos'
 import { userRepository } from '@server/repositories/userRepository'
 import { userSchema } from '@server/entities/user'
+import { hash } from 'bcrypt'
+import config from '@server/config'
 
 export default publicProcedure
   .use(provideRepos({ userRepository }))
@@ -15,9 +17,12 @@ export default publicProcedure
   )
   .mutation(async ({ input, ctx: { repos } }) => {
     const { email, password, firstName, lastName } = input
+
+    const hashedPassword = await hash(password, config.auth.passwordCost)
+
     const newUser = await repos.userRepository.create({
       email,
-      password,
+      password: hashedPassword,
       firstName,
       lastName,
     })

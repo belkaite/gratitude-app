@@ -1,9 +1,12 @@
 import type { Database } from '@server/database'
 import type { User } from '@server/database/types'
-import { type UserPublic, userKeysPublic } from '@server/entities/user'
-import type { Insertable } from 'kysely'
+import {
+  type UserPublic,
+  userKeysAll,
+  userKeysPublic,
+} from '@server/entities/user'
+import type { Insertable, Selectable } from 'kysely'
 
-// This could be written as a class, though the difference is mostly semantic.
 export function userRepository(db: Database) {
   return {
     async create(user: Insertable<User>): Promise<UserPublic> {
@@ -12,6 +15,16 @@ export function userRepository(db: Database) {
         .values(user)
         .returning(userKeysPublic)
         .executeTakeFirstOrThrow()
+    },
+
+    async findByEmail(email: string): Promise<Selectable<User> | undefined> {
+      const user = await db
+        .selectFrom('user')
+        .select(userKeysAll)
+        .where('user.email', '=', email)
+        .executeTakeFirst()
+
+      return user
     },
   }
 }

@@ -8,7 +8,7 @@ const db = await wrapInRollbacks(createTestDatabase())
 
 const caller = createCallerFactory(userRouter)({ db })
 
-it('should save the user', async () => {
+it('should login the user', async () => {
   // arrange
   const user = {
     firstName: 'Dumas',
@@ -17,24 +17,12 @@ it('should save the user', async () => {
     password: 'password123**',
   }
 
+  await caller.signup(user)
+
   // act
 
-  const response = await caller.signup(user)
+  const response = await caller.login(user)
 
   // assert
-  expect(response).toEqual({ id: expect.any(Number) })
-
-  const [userCreated] = await selectAll(db, 'user', (eb) =>
-    eb('email', '=', user.email)
-  )
-
-  expect(userCreated).toMatchObject({
-    id: expect.any(Number),
-    email: 'koldunas@domain.com',
-    password: 'password123**',
-    firstName: 'Dumas',
-    lastName: 'Koldunas',
-  })
-
-  expect(response).toEqual({id: userCreated.id})
+  expect(response).toEqual({ email: 'koldunas@domain.com' })
 })
