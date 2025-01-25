@@ -1,9 +1,14 @@
+import config from '@server/config'
 import { userSchema } from '@server/entities/user'
 import { userRepository } from '@server/repositories/userRepository'
 import { publicProcedure } from '@server/trpc'
 import provideRepos from '@server/trpc/provideRepos'
 import { TRPCError } from '@trpc/server'
+import jsonwebtoken from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
+import { prepareTokenPayload } from '@server/trpc/tokenPayload'
+
+const { expiresIn, tokenKey } = config.auth
 
 export default publicProcedure
   .use(provideRepos({ userRepository }))
@@ -27,7 +32,11 @@ export default publicProcedure
       })
     }
 
+    const payload = prepareTokenPayload(user)
+
+    const accessToken = jsonwebtoken.sign(payload, tokenKey, { expiresIn })
+
     return {
-      email,
+      accessToken,
     }
   })
