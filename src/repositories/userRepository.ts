@@ -26,5 +26,17 @@ export function userRepository(db: Database) {
 
       return user
     },
+
+    async updatePassword(
+      newPassword: string,
+      email: string
+    ): Promise<UserPublic | undefined> {
+      return db
+        .updateTable('user')
+        .set({ password: newPassword })
+        .where('user.email', '=', email)
+        .returning(userKeysPublic)
+        .executeTakeFirst()
+    },
   }
 }
