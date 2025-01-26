@@ -27,14 +27,22 @@ export function userRepository(db: Database) {
       return user
     },
 
+    async findById(id: number): Promise<Selectable<User> | undefined> {
+      return db
+        .selectFrom('user')
+        .selectAll()
+        .where('user.id', '=', id)
+        .executeTakeFirst()
+    },
+
     async updatePassword(
       newPassword: string,
-      email: string
+      id: number
     ): Promise<UserPublic | undefined> {
       return db
         .updateTable('user')
         .set({ password: newPassword })
-        .where('user.email', '=', email)
+        .where('user.id', '=', id)
         .returning(userKeysPublic)
         .executeTakeFirst()
     },

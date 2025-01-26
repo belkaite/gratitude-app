@@ -1,48 +1,20 @@
-import { publicProcedure } from '@server/trpc'
 import provideRepos from '@server/trpc/provideRepos'
 import { userRepository } from '@server/repositories/userRepository'
-import { changePasswordSchema, type AuthUser } from '@server/entities/user'
+import { changePasswordSchema } from '@server/entities/user'
 import { TRPCError } from '@trpc/server'
-import jsonwebtoken from 'jsonwebtoken'
 import config from '@server/config'
 import bcrypt, { hash } from 'bcrypt'
+import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure'
 
-const { tokenKey } = config.auth
-
-export default publicProcedure
+export default authenticatedProcedure
   .use(provideRepos({ userRepository }))
   .input(changePasswordSchema)
   .mutation(
     async ({
-      input: { email, currentPassword, newPassword },
-      ctx: { repos, req },
+      input: { currentPassword, newPassword },
+      ctx: { repos, authUser },
     }) => {
-      if (!req) {
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'This endpoint should be in express',
-        })
-      }
-
-      const token = req.header('Authorization')?.replace('Bearer ', '')
-
-      if (!token) {
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: 'Missing token.',
-        })
-      }
-
-      const { user } = getUserFromToken(token)
-
-      if (user.email !== email) {
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: 'You are not authorized to change this password.',
-        })
-      }
-
-      const userInDatabase = await repos.userRepository.findByEmail(email)
+      const userInDatabase = await repos.userRepository.findById(authUser.id)
 
       if (!userInDatabase) {
         throw new TRPCError({
@@ -67,13 +39,12 @@ export default publicProcedure
 
       await repos.userRepository.updatePassword(
         hashedPassword,
-        userInDatabase.email
+        userInDatabase.id
       )
 
-      return { email, message: 'Password successfullt updated' }
+      return {
+        email: userInDatabase.email,
+        message: 'Password successfullt updated',
+      }
     }
   )
-
-function getUserFromToken(token: string) {
-  return jsonwebtoken.verify(token, tokenKey) as { user: AuthUser }
-}
