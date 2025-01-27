@@ -6,7 +6,7 @@ export const userSchema = z.object({
   id: z.number().int().positive(),
   firstName: z.string().min(1).max(100),
   lastName: z.string().min(1).max(100),
-  email: z.string().email().toLowerCase().trim(),
+  email: z.string().trim().email().toLowerCase(),
   password: z
     .string()
     .min(8, 'Password must be at elast 8 characters long')
