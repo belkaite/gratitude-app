@@ -4,7 +4,6 @@ import { wrapInRollbacks } from '@tests/utils/transactions'
 import { selectAll } from '@tests/utils/records'
 import { fakeUser } from '@server/entities/tests/fakes'
 import userRouter from '..'
-import signup from '../signup'
 
 const db = await wrapInRollbacks(createTestDatabase())
 
