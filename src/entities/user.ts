@@ -6,10 +6,10 @@ export const userSchema = z.object({
   id: z.number().int().positive(),
   firstName: z.string().min(1).max(100),
   lastName: z.string().min(1).max(100),
-  email: z.string().email().toLowerCase().trim(),
+  email: z.string().trim().email().toLowerCase(),
   password: z
     .string()
-    .min(8, 'Password must be at elast 8 characters long')
+    .min(8, 'Password must be at least 8 characters long')
     .max(64, 'Password must be at most 64 characters long'),
 })
 
@@ -24,7 +24,6 @@ export const authUserSchema = userSchema.pick({ id: true })
 export type AuthUser = z.infer<typeof authUserSchema>
 
 export const changePasswordSchema = z.object({
-  email: userSchema.shape.email,
-  currentPassword: userSchema.shape.email,
+  currentPassword: userSchema.shape.password,
   newPassword: userSchema.shape.password,
 })
