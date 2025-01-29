@@ -44,7 +44,7 @@ export default authenticatedProcedure
 
       return {
         email: userInDatabase.email,
-        message: 'Password successfullt updated',
+        message: 'Password successfully updated',
       }
     }
   )

@@ -13,8 +13,8 @@ function verify(token: string) {
 function getUserFromToken(token: string | undefined) {
   if (!token) {
     throw new TRPCError({
-        code: 'UNAUTHORIZED', 
-        message: 'Missing token'
+        code: 'UNAUTHORIZED',
+        message: 'You must log in to access this website'
     })
   }
   try {
