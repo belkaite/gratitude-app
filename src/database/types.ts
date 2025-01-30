@@ -14,7 +14,8 @@ export interface Level {
 }
 
 export interface Note {
-  content: string
+  answer1: string
+  answer2: string
   createdAt: Generated<Timestamp>
   id: Generated<number>
   levelId: number
