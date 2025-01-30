@@ -20,7 +20,12 @@ it('should change the password', async () => {
     authUser: { id },
   })
 
-  const { password: oldPassword } = await userRepository(db).findById(id)
+  const userBeforeUpdate = await userRepository(db).findById(id)
+  if (!userBeforeUpdate) {
+    throw new Error('User not found before password change')
+  }
+
+  const oldPassword = userBeforeUpdate.password
 
   const response = await caller2.changePassword({
     currentPassword: 'labadiena152**',
@@ -31,7 +36,13 @@ it('should change the password', async () => {
     message: expect.stringMatching(/success/i),
   })
 
-  const { password: newPassword } = await userRepository(db).findById(id)
+  const userAfterUpdate = await userRepository(db).findById(id)
+
+  if (!userAfterUpdate) {
+    throw new Error('User not found after password change')
+  }
+
+  const newPassword = userAfterUpdate.password
 
   expect(newPassword.slice(0, 4)).toEqual('$2b$')
   expect(oldPassword).not.toEqual(newPassword)
