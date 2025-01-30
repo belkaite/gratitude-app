@@ -2,6 +2,7 @@ import { wrapInRollbacks } from '@tests/utils/transactions'
 import { createTestDatabase } from '@tests/utils/database'
 import { createCallerFactory } from '@server/trpc'
 import { fakeUser } from '@server/entities/tests/fakes'
+import { userRepository } from '@server/repositories/userRepository'
 import userRouter from '..'
 
 const db = await wrapInRollbacks(createTestDatabase())
@@ -19,6 +20,13 @@ it('should change the password', async () => {
     authUser: { id },
   })
 
+  const userBeforeUpdate = await userRepository(db).findById(id)
+  if (!userBeforeUpdate) {
+    throw new Error('User not found before password change')
+  }
+
+  const oldPassword = userBeforeUpdate.password
+
   const response = await caller2.changePassword({
     currentPassword: 'labadiena152**',
     newPassword: 'gerovakaro152**',
@@ -27,6 +35,17 @@ it('should change the password', async () => {
   expect(response).toMatchObject({
     message: expect.stringMatching(/success/i),
   })
+
+  const userAfterUpdate = await userRepository(db).findById(id)
+
+  if (!userAfterUpdate) {
+    throw new Error('User not found after password change')
+  }
+
+  const newPassword = userAfterUpdate.password
+
+  expect(newPassword.slice(0, 4)).toEqual('$2b$')
+  expect(oldPassword).not.toEqual(newPassword)
 })
 
 it('should fail when current password is incorrect', async () => {
