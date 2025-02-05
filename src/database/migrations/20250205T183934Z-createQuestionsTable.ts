@@ -14,28 +14,28 @@ export async function up(db: Kysely<any>) {
   await db
     .insertInto('question')
     .values([
-      { content: 'What happened today?', level_id: 1, order: 1 },
-      { content: 'Did something good happened to you?', level_id: 1, order: 2 },
+      { content: 'What happened today?', levelId: 1, order: 1 },
+      { content: 'Did something good happened to you?', levelId: 1, order: 2 },
       {
         content:
           'What would you be sad about if it was missing from your life?',
-        level_id: 2,
+        levelId: 2,
         order: 1,
       },
       {
         content:
           "Are there things you ussually don't think about that you can appreciate?",
-        level_id: 2,
+        levelId: 2,
         order: 2,
       },
       {
         content: 'What are you grateful for today?',
-        level_id: 3,
+        levelId: 3,
         order: 1,
       },
       {
         content: 'What are you grateful for in your life?',
-        level_id: 3,
+        levelId: 3,
         order: 2,
       },
     ])
