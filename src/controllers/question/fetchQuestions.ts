@@ -1,10 +1,11 @@
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure'
 import provideRepos from '@server/trpc/provideRepos'
 import { userRepository } from '@server/repositories/userRepository'
+import { questionRepository } from '@server/repositories/questionRepository'
 import { TRPCError } from '@trpc/server'
 
 export default authenticatedProcedure
-  .use(provideRepos({ userRepository }))
+  .use(provideRepos({ userRepository, questionRepository }))
   .query(async ({ ctx: { repos, authUser } }) => {
     const user = await repos.userRepository.findById(authUser.id)
 
@@ -15,8 +16,7 @@ export default authenticatedProcedure
       })
     }
 
-    const questions = await repos.questionRepository?.findByLevel(1)
-
+    const questions = await repos.questionRepository?.findByLevel(user.level)
 
     if (questions?.length !== 2) {
       throw new TRPCError({

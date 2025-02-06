@@ -9,6 +9,8 @@ const db = await wrapInRollbacks(createTestDatabase())
 it('should return questions for a given level', async () => {
   const questions = await questionRepository(db).findByLevel(1)
 
+
+
   expect(questions).toEqual([
     { content: 'What happened today?' },
     { content: 'Did something good happened to you?' },
