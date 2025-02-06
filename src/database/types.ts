@@ -14,11 +14,19 @@ export interface Level {
 }
 
 export interface Note {
-  content: string
+  answer1: string
+  answer2: string
   createdAt: Generated<Timestamp>
   id: Generated<number>
   levelId: number
   userId: number
+}
+
+export interface Question {
+  content: string
+  id: Generated<number>
+  levelId: number
+  order: number
 }
 
 export interface ScientificTip {
@@ -40,6 +48,7 @@ export interface User {
 export interface DB {
   level: Level
   note: Note
+  question: Question
   scientificTip: ScientificTip
   user: User
 }
