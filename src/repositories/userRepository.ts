@@ -30,7 +30,7 @@ export function userRepository(db: Database) {
     async findById(id: number): Promise<Selectable<User> | undefined> {
       return db
         .selectFrom('user')
-        .selectAll()
+        .select(userKeysAll)
         .where('user.id', '=', id)
         .executeTakeFirst()
     },

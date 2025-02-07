@@ -1,18 +1,28 @@
 import { wrapInRollbacks } from '@tests/utils/transactions'
 import { createTestDatabase } from '@tests/utils/database'
-// import { createCallerFactory } from '@server/trpc'
-import { questionRepository } from '@server/repositories/questionRepository'
+import { createCallerFactory } from '@server/trpc'
+import { fakeUser } from '@server/entities/tests/fakes'
+import questionRouter from '..'
+import userRouter from '../../user'
+import { Level } from '../../../database/types'
 
 const db = await wrapInRollbacks(createTestDatabase())
-// const caller = createCallerFactory(questionRepository)({ db })
+const user = fakeUser({
+  email: 'hello@gmail.com',
+  password: 'labadiena152**',
+})
+const caller1 = createCallerFactory(userRouter)({ db })
+const { id } = await caller1.signup(user)
+const caller2 = createCallerFactory(
+  questionRouter,
+  userRouter
+)({ db, authUser: { id } })
 
 it('should return questions for a given level', async () => {
-  const questions = await questionRepository(db).findByLevel(1)
+  const response = await caller2.fetchQuestions()
 
-
-
-  expect(questions).toEqual([
-    { content: 'What happened today?' },
-    { content: 'Did something good happened to you?' },
-  ])
+  expect(response).toEqual({
+    question1: 'What happened today?',
+    question2: 'Did something good happened to you?',
+  })
 })
