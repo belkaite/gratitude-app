@@ -38,6 +38,14 @@ export default authenticatedProcedure
       question2: questions[1].content,
     })
 
+    const notesCount = await repos.noteRepository.countNotesByUser(authUser.id)
+
+    if (user.level < 3 && notesCount === 15) {
+      const newLevel = user.level + 1
+
+      await repos.userRepository.updateLevel(authUser.id, newLevel)
+    }
+
     return {
       message: 'Note has been submitted successfully',
       note: newNote,

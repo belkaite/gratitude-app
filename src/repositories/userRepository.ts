@@ -46,5 +46,17 @@ export function userRepository(db: Database) {
         .returning(userKeysPublic)
         .executeTakeFirst()
     },
+
+    async updateLevel(
+      id: number,
+      newLevel: number
+    ): Promise<Selectable<User> | undefined> {
+      return db
+        .updateTable('user')
+        .set({ level: newLevel })
+        .where('user.id', '=', id)
+        .returning(userKeysAll)
+        .executeTakeFirst()
+    },
   }
 }
