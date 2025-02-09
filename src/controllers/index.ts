@@ -1,10 +1,12 @@
 import { router } from '../trpc'
 import user from './user'
 import question from './question'
+import note from './note'
 
 export const appRouter = router({
   user,
-  question
+  question,
+  note,
 })
 
 // ?

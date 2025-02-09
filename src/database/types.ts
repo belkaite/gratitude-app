@@ -19,6 +19,8 @@ export interface Note {
   createdAt: Generated<Timestamp>
   id: Generated<number>
   levelId: number
+  question1: string
+  question2: string
   userId: number
 }
 

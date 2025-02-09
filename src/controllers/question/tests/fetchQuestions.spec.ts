@@ -4,7 +4,6 @@ import { createCallerFactory } from '@server/trpc'
 import { fakeUser } from '@server/entities/tests/fakes'
 import questionRouter from '..'
 import userRouter from '../../user'
-import { Level } from '../../../database/types'
 
 const db = await wrapInRollbacks(createTestDatabase())
 const user = fakeUser({
@@ -13,10 +12,7 @@ const user = fakeUser({
 })
 const caller1 = createCallerFactory(userRouter)({ db })
 const { id } = await caller1.signup(user)
-const caller2 = createCallerFactory(
-  questionRouter,
-  userRouter
-)({ db, authUser: { id } })
+const caller2 = createCallerFactory(questionRouter)({ db, authUser: { id } })
 
 it('should return questions for a given level', async () => {
   const response = await caller2.fetchQuestions()

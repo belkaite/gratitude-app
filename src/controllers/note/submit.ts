@@ -3,12 +3,16 @@ import provideRepos from '@server/trpc/provideRepos'
 import { userRepository } from '@server/repositories/userRepository'
 import { questionRepository } from '@server/repositories/questionRepository'
 import { TRPCError } from '@trpc/server'
+import { noteSchema } from '../../entities/note'
+import { noteRepository } from '../../repositories/noteRepository'
 
 export default authenticatedProcedure
-  .use(provideRepos({ userRepository, questionRepository }))
-  .query(async ({ ctx: { repos, authUser } }) => {
-    const user = await repos.userRepository.findById(authUser.id)
+  .use(provideRepos({ userRepository, questionRepository, noteRepository }))
+  .input(noteSchema.pick({ answer1: true, answer2: true }))
+  .mutation(async ({ input, ctx: { repos, authUser } }) => {
+    const { answer1, answer2 } = input
 
+    const user = await repos.userRepository.findById(authUser.id)
     if (!user) {
       throw new TRPCError({
         code: 'NOT_FOUND',
@@ -25,8 +29,17 @@ export default authenticatedProcedure
       })
     }
 
-    return {
+    const newNote = await repos.noteRepository.create({
+      answer1,
+      answer2,
+      userId: authUser.id,
+      levelId: user.level,
       question1: questions[0].content,
       question2: questions[1].content,
+    })
+
+    return {
+      message: 'Note has been submitted successfully',
+      note: newNote,
     }
   })
