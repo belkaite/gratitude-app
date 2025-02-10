@@ -1,4 +1,4 @@
-import type { User } from '@server/database/types'
+import type { User, Note } from '@server/database/types'
 import type { Insertable } from 'kysely'
 import { random } from '@tests/utils/random'
 import type { AuthUser } from '../user'
@@ -31,3 +31,16 @@ export const fakeAuthUser = <T extends Partial<AuthUser>>(
   email: random.email(),
   ...overrides,
 })
+
+export const fakeNote = <T extends Partial<Insertable<Note>>>(
+  overrides: T = {} as T
+) =>
+  ({
+    answer1: random.sentence(),
+    answer2: random.sentence(),
+    levelId: random.integer({ min: 1, max: 3 }),
+    question1: random.sentence(),
+    question2: random.sentence(),
+    userId: randomId(),
+    ...overrides,
+  }) satisfies Insertable<Note>

@@ -82,3 +82,20 @@ describe('updatePassword', () => {
     expect(userAfterUpdate?.password).not.to.equal(user.password)
   })
 })
+
+describe('updateLevel', () => {
+  it('should update users level', async () => {
+    const user = fakeUser()
+
+    const { id } = await repository.create(user)
+
+    const newLevel = 2
+
+    await repository.updateLevel(id, newLevel)
+
+    const userAfterUpdate = await repository.findById(id)
+
+    expect(userAfterUpdate?.level).not.to.equal(user.level)
+    expect(userAfterUpdate?.level).equal(newLevel)
+  })
+})

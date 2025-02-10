@@ -8,6 +8,8 @@ export const noteSchema = z.object({
   answer2: z.string().min(1),
   levelId: z.number().int().positive(),
   userId: z.number().int().positive(),
+  question1: z.string().min(1),
+  question2: z.string().min(1),
   createdAt: z.date().default(() => new Date()),
 })
 
