@@ -20,7 +20,29 @@ export function noteRepository(db: Database) {
         .select((eb) => eb.fn.countAll().as('noteCount'))
         .executeTakeFirst()
 
-        return Number(result?.noteCount) || 0
+      return Number(result?.noteCount) || 0
+    },
+
+    async getAll(userId: number): Promise<NotePublic[]> {
+      return db
+        .selectFrom('note')
+        .where('userId', '=', userId)
+        .select(noteKeysAll.filter((key) => key !== 'userId'))
+        .execute()
+    },
+
+    async update(
+      userId: number,
+      id: number,
+      updates: { answer1: string; answer2: string }
+    ): Promise<NotePublic | undefined> {
+      return db
+        .updateTable('note')
+        .set(updates)
+        .where('userId', '=', userId)
+        .where('id', '=', id)
+        .returning(noteKeysAll)
+        .executeTakeFirst()
     },
   }
 }

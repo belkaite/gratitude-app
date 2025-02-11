@@ -13,5 +13,10 @@ export const noteSchema = z.object({
   createdAt: z.date().default(() => new Date()),
 })
 
-export const noteKeysAll = Object.keys(noteSchema.shape) as (keyof Note)[]
-export type NotePublic = Pick<Selectable<Note>, (typeof noteKeysAll)[number]>
+export const noteKeysAll = Object.keys(noteSchema.shape) as Array<keyof Note>
+
+export const noteKeysPublic = noteKeysAll.filter((key) => key !== 'userId')
+
+
+export type NoteAll = Pick<Selectable<Note>, (typeof noteKeysAll)[number]>
+export type NotePublic = Pick<Selectable<Note>, (typeof noteKeysPublic)[number]>

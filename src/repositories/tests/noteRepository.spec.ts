@@ -41,3 +41,27 @@ it('should count notes by user', async () => {
 
   expect(updatedCount).toBe(1)
 })
+
+it('should return all user notes', async () => {
+  const user = await userRepo.create(fakeUser())
+
+  const notes = await repository.getAll(user.id)
+
+  expect(notes).toEqual([])
+
+  const note = await repository.create(fakeNote({ userId: user.id }))
+
+  const updatedNotes = await repository.getAll(user.id)
+
+  expect(updatedNotes).toEqual([
+    {
+      answer1: note.answer1,
+      answer2: note.answer2,
+      levelId: note.levelId,
+      question1: note.question1,
+      question2: note.question2,
+      createdAt: note.createdAt,
+      id: note.id,
+    },
+  ])
+})
