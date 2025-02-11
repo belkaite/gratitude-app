@@ -1,7 +1,7 @@
 import type { Database } from '@server/database'
 import type { Insertable } from 'kysely'
 import type { Note } from '@server/database/types'
-import { noteKeysAll, type NotePublic } from '../entities/note'
+import { noteKeysAll, noteKeysPublic, type NotePublic } from '../entities/note'
 
 export function noteRepository(db: Database) {
   return {
@@ -27,7 +27,7 @@ export function noteRepository(db: Database) {
       return db
         .selectFrom('note')
         .where('userId', '=', userId)
-        .select(noteKeysAll.filter((key) => key !== 'userId'))
+        .select(noteKeysPublic)
         .execute()
     },
 
@@ -41,7 +41,15 @@ export function noteRepository(db: Database) {
         .set(updates)
         .where('userId', '=', userId)
         .where('id', '=', id)
-        .returning(noteKeysAll)
+        .returning(noteKeysPublic)
+        .executeTakeFirst()
+    },
+
+    async delete(userId: number, id: number): Promise<NotePublic | undefined> {
+      return db
+        .deleteFrom('note')
+        .where('id', '=', id)
+        .returning(noteKeysPublic)
         .executeTakeFirst()
     },
   }
