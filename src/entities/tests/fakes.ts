@@ -38,7 +38,7 @@ export const fakeNote = <T extends Partial<Insertable<Note>>>(
   ({
     answer1: random.sentence(),
     answer2: random.sentence(),
-    levelId: random.integer({ min: 1, max: 3 }),
+    levelId: 1,
     question1: random.sentence(),
     question2: random.sentence(),
     userId: randomId(),

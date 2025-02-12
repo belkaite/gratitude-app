@@ -31,10 +31,22 @@ export function noteRepository(db: Database) {
         .execute()
     },
 
+    async findById(
+      userId: number,
+      id: number
+    ): Promise<NotePublic | undefined> {
+      return db
+        .selectFrom('note')
+        .where('userId', '=', userId)
+        .where('id', '=', id)
+        .select(noteKeysPublic)
+        .executeTakeFirst()
+    },
+
     async update(
       userId: number,
       id: number,
-      updates: { answer1: string; answer2: string }
+      updates: Partial<{ answer1: string; answer2: string }>
     ): Promise<NotePublic | undefined> {
       return db
         .updateTable('note')
