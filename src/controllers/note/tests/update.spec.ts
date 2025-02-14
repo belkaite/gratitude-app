@@ -17,11 +17,34 @@ const { id } = await caller1.signup(user)
 const caller2 = createCallerFactory(noteRouter)({ db, authUser: { id } })
 
 it('should update the note', async () => {
-    const note = fakeNote({userId: id})
+  const note = fakeNote({ userId: id })
 
-    const createdNote = await caller2.submit(note)
+  const createdNote = await caller2.submit(note)
 
-    const noteId = createdNote.note.id
+  const noteId = createdNote.note.id
 
-    const updatedNote = await caller2.update({ id: noteId, answer1: 'updated text', answer2: 'text'})
+  const updatedNote1 = await caller2.update({
+    id: noteId,
+    answer1: undefined,
+    answer2: undefined,
+  })
+
+  expect(updatedNote1).toMatchObject({
+    message: expect.stringMatching(/no changes/i),
+    updatedNote: {answer1: note.answer1, answer2: note.answer2}
+  })
+
+  const updatedNote2 = await caller2.update({
+    id: noteId,
+    answer1: 'updated text',
+    answer2: 'updated text 2',
+  })
+
+  expect(updatedNote2).toMatchObject({
+    message: expect.stringMatching(/success/i),
+    updatedNote: {
+      answer1: 'updated text',
+      answer2: 'updated text 2',
+    },
+  })
 })

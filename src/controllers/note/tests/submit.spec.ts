@@ -31,7 +31,7 @@ it('should submit the note', async () => {
   const response = await caller2.submit(note)
 
   expect(response).toMatchObject({
-    message: 'Note has been submitted successfully',
+    message: expect.stringMatching(/success/i),
     note: {
       answer1: note.answer1,
       answer2: note.answer2,

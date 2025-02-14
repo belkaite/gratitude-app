@@ -25,15 +25,10 @@ export default authenticatedProcedure
       })
     }
 
-    const updatedPayload: Partial<{ answer1: string | undefined; answer2: string | undefined}> = {}
+    const updatedPayload: Partial<{ answer1: string; answer2: string }> = {}
 
-    if (answer1 !== undefined) {
-      updatedPayload.answer1 = answer1
-    }
-
-    if (answer2 !== undefined) {
-      updatedPayload.answer2 = answer2
-    }
+    if (answer1 !== undefined) updatedPayload.answer1 = answer1
+    if (answer2 !== undefined) updatedPayload.answer2 = answer2
 
     if (Object.keys(updatedPayload).length === 0) {
       return {
