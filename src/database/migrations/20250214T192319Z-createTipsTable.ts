@@ -2,7 +2,7 @@ import type { Kysely } from 'kysely'
 
 export async function up(db: Kysely<any>) {
   await db.schema
-    .createTable('scientific_tip')
+    .createTable('tip')
     .addColumn('id', 'integer', (c) =>
       c.primaryKey().generatedAlwaysAsIdentity()
     )
@@ -13,5 +13,5 @@ export async function up(db: Kysely<any>) {
 }
 
 export async function down(db: Kysely<any>) {
-  await db.schema.dropTable('scientific_tip').execute()
+  await db.schema.dropTable('tip').execute()
 }
