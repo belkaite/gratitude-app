@@ -16,9 +16,9 @@ export default authenticatedProcedure
       })
     }
 
-    const questions = await repos.questionRepository?.findByLevel(user.level)
+    const questions = await repos.questionRepository.findByLevel(user.level)
 
-    if (questions?.length !== 2) {
+    if (questions.length !== 2) {
       throw new TRPCError({
         code: 'NOT_FOUND',
         message: 'Questions not found for this level',
