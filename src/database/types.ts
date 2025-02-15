@@ -31,10 +31,9 @@ export interface Question {
   order: number
 }
 
-export interface ScientificTip {
+export interface Tip {
   content: string
   id: Generated<number>
-  levelId: number
   order: number
 }
 
@@ -51,6 +50,6 @@ export interface DB {
   level: Level
   note: Note
   question: Question
-  scientificTip: ScientificTip
+  tip: Tip
   user: User
 }
