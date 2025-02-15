@@ -46,10 +46,18 @@ export interface User {
   password: string
 }
 
+export interface UserTip {
+  createdAt: Generated<Timestamp>
+  id: Generated<number>
+  tipId: number
+  userId: number
+}
+
 export interface DB {
   level: Level
   note: Note
   question: Question
   tip: Tip
   user: User
+  userTip: UserTip
 }
