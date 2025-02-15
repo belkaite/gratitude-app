@@ -40,7 +40,7 @@ export default authenticatedProcedure
 
     const notesCount = await repos.noteRepository.countNotesByUser(authUser.id)
 
-    if (user.level < 3 && notesCount === 15) {
+    if (user.level < 3 && (notesCount === 15 || notesCount === 30)) {
       const newLevel = user.level + 1
 
       await repos.userRepository.updateLevel(authUser.id, newLevel)
