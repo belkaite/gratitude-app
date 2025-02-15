@@ -3,11 +3,19 @@ import provideRepos from '@server/trpc/provideRepos'
 import { userRepository } from '@server/repositories/userRepository'
 import { questionRepository } from '@server/repositories/questionRepository'
 import { TRPCError } from '@trpc/server'
+import { tipRepository } from '@server/repositories/tipRepository'
 import { noteSchema } from '../../entities/note'
 import { noteRepository } from '../../repositories/noteRepository'
 
 export default authenticatedProcedure
-  .use(provideRepos({ userRepository, questionRepository, noteRepository }))
+  .use(
+    provideRepos({
+      userRepository,
+      questionRepository,
+      noteRepository,
+      tipRepository,
+    })
+  )
   .input(noteSchema.pick({ answer1: true, answer2: true }))
   .mutation(async ({ input, ctx: { repos, authUser } }) => {
     const { answer1, answer2 } = input
@@ -46,8 +54,14 @@ export default authenticatedProcedure
       await repos.userRepository.updateLevel(authUser.id, newLevel)
     }
 
+    const tip =
+      notesCount % 5 === 0
+        ? await repos.tipRepository.findByOrder(notesCount / 5)
+        : null
+
     return {
       message: 'Note has been submitted successfully',
       note: newNote,
+      ...(tip ? { tip } : {}),
     }
   })

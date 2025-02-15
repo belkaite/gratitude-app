@@ -1,9 +1,20 @@
 import type { Kysely } from 'kysely'
 
 export async function up(db: Kysely<any>) {
-  await db.insertInto('tip').values([
-    {
-      content: `
+  await db.schema
+    .createTable('tip')
+    .addColumn('id', 'integer', (c) =>
+      c.primaryKey().generatedAlwaysAsIdentity()
+    )
+    .addColumn('content', 'text', (c) => c.notNull())
+    .addColumn('order', 'integer', (c) => c.notNull().unique())
+    .execute()
+
+  await db
+    .insertInto('tip')
+    .values([
+      {
+        content: `
         You have been writing this journal for quite a bit now.
         Do you notice a difference? Maybe you feel this might be working,
         but chances are that it is also pretty exhausting. Some days you
@@ -23,12 +34,13 @@ export async function up(db: Kysely<any>) {
         work through—you can only benefit.
 
         Source: Wong Y J, Owen J, et al: Does Gratitude Writing Improve the Mental Health of Psychotherapy Clients? (2018).
-      `,
-      level_id: 1,
-      order: 1,
-    },
-    {
-      content: `
+      `
+          .replace(/\s+/g, ' ')
+          .trim(),
+        order: 1,
+      },
+      {
+        content: `
         Maybe this Gratitude thing has already become part of your life, and you would like to
         tell others about it. Or you realize you always write about your friends and family and
         would like to tell them, but it feels weird and a little embarrassing.
@@ -47,12 +59,13 @@ export async function up(db: Kysely<any>) {
         the positive impact.
 
         Source: Kumar A, Epley N: Undervaluing Gratitude: Expressers Misunderstand the Consequences of Showing Appreciation (2018).
-      `,
-      level_id: 1,
-      order: 2,
-    },
-    {
-      content: `
+      `
+          .replace(/\s+/g, ' ')
+          .trim(),
+        order: 2,
+      },
+      {
+        content: `
         Gratitude can literally change your mind. 
         Researchers asked people to imagine that they were survivors of a catastrophe who were given food
         and shelter by strangers. By studying the brains of participants, scientists discovered which
@@ -69,12 +82,13 @@ export async function up(db: Kysely<any>) {
 
         Source: Yu H, Goa X, et al: Decomposing Gratitude: Representation and Integration of Cognitive
         Antecedents of Gratitude in the Brain (2018).
-      `,
-      level_id: 2,
-      order: 1,
-    },
-    {
-      content: `
+      `
+          .replace(/\s+/g, ' ')
+          .trim(),
+        order: 3,
+      },
+      {
+        content: `
         Why are you writing this Gratitude journal? Most likely because you hope it will be good for you.
         With things like this, it can be easy to become impatient very fast. Soon, we ask ourselves:
         I've been so good—where are the results already?
@@ -90,12 +104,13 @@ export async function up(db: Kysely<any>) {
 
         Source: Dickens L, DeSteno D: The Grateful are Patient: Heightened Daily Gratitude is Associated with Attenuated Temporal
         Discounting (2016).
-      `,
-      level_id: 2,
-      order: 2,
-    },
-    {
-      content: `
+      `
+          .replace(/\s+/g, ' ')
+          .trim(),
+        order: 4,
+      },
+      {
+        content: `
         You're reading this, so you took the time to do this Gratitude thing. Congrats—good for you!
         If you're feeling instantly guilty because this is the first time in a while you've written in your journal—don't.
         Science actually says writing in a Gratitude journal once a week can be better for you than writing daily.
@@ -111,12 +126,13 @@ export async function up(db: Kysely<any>) {
         stays something special.
 
         Source: Armenta C, Boa K J, et al: Is Lasting Change Possible? Lessons from the Hedonic Adaptation Prevention Model (2014).
-      `,
-      level_id: 2,
-      order: 3,
-    },
-    {
-      content: `
+      `
+          .replace(/\s+/g, ' ')
+          .trim(),
+        order: 5,
+      },
+      {
+        content: `
         Has Gratitude become a ritual for you, or are you still struggling to fit it in?
         Many people find it easier to do something regularly if they always do it at the same time.
         Try writing in your journal right before bed—it might even help you sleep.
@@ -131,13 +147,15 @@ export async function up(db: Kysely<any>) {
         to poor sleep quality.
 
         Source: Emmons R, McCullough M: The Effects of Gratitude on Subjective Well-being in Daily Life (2009).
-      `,
-      level_id: 3,
-      order: 1,
-    },
-  ]).execute()
+      `
+          .replace(/\s+/g, ' ')
+          .trim(),
+        order: 6,
+      },
+    ])
+    .execute()
 }
 
 export async function down(db: Kysely<any>) {
-  await db.deleteFrom('tip').execute()
+  await db.schema.dropTable('tip').execute()
 }

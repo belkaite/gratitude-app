@@ -34,7 +34,6 @@ export interface Question {
 export interface Tip {
   content: string
   id: Generated<number>
-  levelId: number
   order: number
 }
 
