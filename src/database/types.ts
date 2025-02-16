@@ -47,8 +47,8 @@ export interface User {
 }
 
 export interface UserTip {
-  createdAt: Generated<Timestamp>
   id: Generated<number>
+  shownAt: Generated<Timestamp>
   tipId: number
   userId: number
 }
