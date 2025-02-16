@@ -6,8 +6,8 @@ import { userRepository } from '../userRepository'
 
 const db = await wrapInRollbacks(createTestDatabase())
 
-const repository = await noteRepository(db)
-const userRepo = await userRepository(db)
+const repository = noteRepository(db)
+const userRepo = userRepository(db)
 
 it('should create the note', async () => {
   const user = await userRepo.create(fakeUser())

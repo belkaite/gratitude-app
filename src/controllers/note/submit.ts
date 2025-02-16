@@ -4,6 +4,7 @@ import { userRepository } from '@server/repositories/userRepository'
 import { questionRepository } from '@server/repositories/questionRepository'
 import { TRPCError } from '@trpc/server'
 import { tipRepository } from '@server/repositories/tipRepository'
+import { userTipRepository } from '@server/repositories/userTipRepository'
 import { noteSchema } from '../../entities/note'
 import { noteRepository } from '../../repositories/noteRepository'
 
@@ -14,6 +15,7 @@ export default authenticatedProcedure
       questionRepository,
       noteRepository,
       tipRepository,
+      userTipRepository
     })
   )
   .input(noteSchema.pick({ answer1: true, answer2: true }))
@@ -58,6 +60,10 @@ export default authenticatedProcedure
       notesCount % 5 === 0
         ? await repos.tipRepository.findByOrder(notesCount / 5)
         : null
+
+    if (tip) {
+      await repos.userTipRepository.saveShownTip(authUser.id, tip.id)
+    }
 
     return {
       message: 'Note has been submitted successfully',
