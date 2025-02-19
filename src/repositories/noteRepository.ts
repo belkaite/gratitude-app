@@ -64,5 +64,16 @@ export function noteRepository(db: Database) {
         .returning(noteKeysPublic)
         .executeTakeFirst()
     },
+
+    async findLastAnswers(
+      userId: number
+    ): Promise<{ answer1: string; answer2: string } | undefined> {
+      return db
+        .selectFrom('note')
+        .where('userId', '=', userId)
+        .orderBy('createdAt', 'desc')
+        .select(['answer1', 'answer2'])
+        .executeTakeFirst()
+    },
   }
 }

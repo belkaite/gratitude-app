@@ -65,3 +65,18 @@ it('should return all user notes', async () => {
     },
   ])
 })
+
+it('should find last user answers', async () => {
+  const user = await userRepo.create(fakeUser())
+
+  await repository.create(
+    fakeNote({ userId: user.id, answer1: 'Test1', answer2: 'Test2' })
+  )
+
+  const lastAnswers = await repository.findLastAnswers(user.id)
+
+  expect(lastAnswers).toEqual({
+    answer1: 'Test1',
+    answer2: 'Test2',
+  })
+})
