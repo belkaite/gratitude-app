@@ -5,7 +5,6 @@ const { env } = process
 
 if (!env.NODE_ENV) env.NODE_ENV = 'development'
 
-
 env.TZ = 'UTC'
 
 const isTest = env.NODE_ENV === 'test'
@@ -31,6 +30,15 @@ const schema = z
       passwordCost: z.coerce.number().default(isDevTest ? 6 : 12),
     }),
 
+    ai: z.object({
+      apiKey: z.string().default(() => {
+        if (isDevTest) {
+          return 'testsupersecretkey'
+        }
+        throw new Error('You must provide an AI API key in production env!')
+      })
+    }),
+
     database: z.object({
       connectionString: z.string().url(),
     }),
@@ -46,6 +54,10 @@ const config = schema.parse({
     tokenKey: env.TOKEN_KEY,
     expiresIn: env.TOKEN_EXPIRES_IN,
     passwordCost: env.PASSWORD_COST,
+  },
+
+  ai: {
+    apiKey: env.OPENAI_API_KEY,
   },
 
   database: {

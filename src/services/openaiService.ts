@@ -1,9 +1,8 @@
-import OpenAI from "openai";
+import OpenAI from 'openai'
+import config from '@server/config'
 
 const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
+  apiKey: config.ai.apiKey,
 })
-
-
 
 export default openai
