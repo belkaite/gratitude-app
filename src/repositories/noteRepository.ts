@@ -60,6 +60,7 @@ export function noteRepository(db: Database) {
     async delete(userId: number, id: number): Promise<NotePublic | undefined> {
       return db
         .deleteFrom('note')
+        .where('userId', '=', userId)
         .where('id', '=', id)
         .returning(noteKeysPublic)
         .executeTakeFirst()

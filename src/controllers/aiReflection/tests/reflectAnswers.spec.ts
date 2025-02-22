@@ -34,38 +34,46 @@ vi.mock('@server/services/openaiService', () => ({
   },
 }))
 
-it('should return AI reflection based on last answers entry', async () => {
+const getMockedResponse = (content: string | null): ChatCompletion => ({
+  id: 'chatcmpl-123',
+  object: 'chat.completion',
+  created: Math.floor(Date.now() / 1000),
+  model: 'gpt-4o-mini',
+  choices: [
+    {
+      index: 0,
+      message: {
+        role: 'assistant',
+        content,
+        refusal: 'stop',
+      },
+      finish_reason: 'stop',
+      logprobs: null,
+    },
+  ],
+  usage: {
+    prompt_tokens: 10,
+    completion_tokens: 10,
+    total_tokens: 20,
+  },
+})
+
+const createdNote = async () => {
   const note = fakeNote({
     userId: createdUser.id,
     answer1: 'I had a long day, full of meetings',
     answer2: 'I woke up early and had a nice walk in sunrise',
   })
 
-  await noteRepo.create(note)
+  return noteRepo.create(note)
+}
 
-  vi.mocked(openai.chat.completions.create).mockResolvedValue({
-    id: 'chatcmpl-123',
-    object: 'chat.completion',
-    created: Math.floor(Date.now() / 1000),
-    model: 'gpt-4o-mini',
-    choices: [
-      {
-        index: 0,
-        message: {
-          role: 'assistant',
-          content: 'Nice mornings can boost your whole day.',
-          refusal: 'stop',
-        },
-        finish_reason: 'stop',
-        logprobs: null,
-      },
-    ],
-    usage: {
-      prompt_tokens: 10,
-      completion_tokens: 10,
-      total_tokens: 20,
-    },
-  })
+it('should return AI reflection based on last answers entry', async () => {
+  await createdNote()
+
+  vi.mocked(openai.chat.completions.create).mockResolvedValue(
+    getMockedResponse('Nice mornings can boost your whole day.')
+  )
 
   const response = await caller.reflectAnswers()
 
@@ -73,40 +81,15 @@ it('should return AI reflection based on last answers entry', async () => {
 })
 
 it('should reject if there is no response from AI', async () => {
+  await createdNote()
 
- const note = fakeNote({
-   userId: createdUser.id,
-   answer1: 'I had a long day, full of meetings',
-   answer2: 'I woke up early and had a nice walk in sunrise',
- })
-
- await noteRepo.create(note)
-
-  const mockResponse: ChatCompletion = {
-    id: 'chatcmpl-123',
-    object: 'chat.completion',
-    created: Math.floor(Date.now() / 1000),
-    model: 'gpt-4o-mini',
-    choices: [
-      {
-        index: 0,
-        message: {
-          role: 'assistant',
-          content: null,
-          refusal: 'stop',
-        },
-        finish_reason: 'stop',
-        logprobs: null,
-      },
-    ],
-    usage: {
-      prompt_tokens: 10,
-      completion_tokens: 10,
-      total_tokens: 20,
-    },
-  }
-
-  vi.mocked(openai.chat.completions.create).mockResolvedValue(mockResponse)
+  vi.mocked(openai.chat.completions.create).mockResolvedValue(
+    getMockedResponse(null)
+  )
 
   await expect(caller.reflectAnswers()).rejects.toThrow(/fail/i)
+})
+
+it('should throw bad request if no previous journal entries exist', async () => {
+  await expect(caller.reflectAnswers()).rejects.toThrow(/no previous/i)
 })

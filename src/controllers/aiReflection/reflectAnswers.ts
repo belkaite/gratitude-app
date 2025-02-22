@@ -5,7 +5,6 @@ import { noteRepository } from '@server/repositories/noteRepository'
 import { TRPCError } from '@trpc/server'
 import { getAiReflection } from './utils/getAiResponse'
 
-
 export default authenticatedProcedure
   .use(provideRepos({ userRepository, noteRepository }))
   .query(async ({ ctx: { repos, authUser } }) => {
@@ -14,18 +13,9 @@ export default authenticatedProcedure
     if (!lastAnswers) {
       throw new TRPCError({
         code: 'BAD_REQUEST',
-        message: 'No previous journal entries'
+        message: 'No previous journal entries',
       })
     }
 
-    try {
-      const aiResponse = await getAiReflection(lastAnswers?.answer1, lastAnswers?.answer2)
-      return aiResponse
-    } catch {
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Failed to generate AI reflection, try again',
-      })
-    }
-
+    return getAiReflection(lastAnswers?.answer1, lastAnswers?.answer2)
   })
