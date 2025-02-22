@@ -17,7 +17,7 @@ export const userSchema = z.object({
 // list keys that we will return to the client
 export const userKeysAll = Object.keys(userSchema.shape) as (keyof User)[]
 
-export const userKeysPublic = ['id', 'firstName', 'lastName'] as const
+export const userKeysPublic = ['id', 'firstName', 'lastName', 'level'] as const
 
 export type UserPublic = Pick<Selectable<User>, (typeof userKeysPublic)[number]>
 

@@ -6,19 +6,29 @@ import questionRouter from '..'
 import userRouter from '../../user'
 
 const db = await wrapInRollbacks(createTestDatabase())
-const user = fakeUser({
-  email: 'hello@gmail.com',
-  password: 'labadiena152**',
-})
 const caller1 = createCallerFactory(userRouter)({ db })
-const { id } = await caller1.signup(user)
-const caller2 = createCallerFactory(questionRouter)({ db, authUser: { id } })
 
 it('should return questions for a given level', async () => {
+  const user = fakeUser({
+    email: 'hello@gmail.com',
+    password: 'labadiena152**',
+  })
+
+  const { id } = await caller1.signup(user)
+  const caller2 = createCallerFactory(questionRouter)({ db, authUser: { id } })
   const response = await caller2.fetchQuestions()
 
   expect(response).toEqual({
     question1: 'What happened today?',
     question2: 'Did something good happened to you?',
   })
+})
+
+it('should throw an error if user is not found', async () => {
+  const caller2 = createCallerFactory(questionRouter)({
+    db,
+    authUser: { id: 9999 },
+  })
+
+  await expect(caller2.fetchQuestions()).rejects.toThrow(/user not found/i)
 })

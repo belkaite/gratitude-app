@@ -3,6 +3,7 @@ import { wrapInRollbacks } from '@tests/utils/transactions'
 import { createCallerFactory } from '@server/trpc'
 import { fakeNote, fakeUser } from '@server/entities/tests/fakes'
 import { questionRepository } from '@server/repositories/questionRepository'
+import { requestContext } from '@tests/utils/context'
 import noteRouter from '..'
 import userRouter from '../../user'
 
@@ -14,12 +15,11 @@ const user = fakeUser({
 const caller1 = createCallerFactory(userRouter)({ db })
 const { id } = await caller1.signup(user)
 
-const caller2 = createCallerFactory(noteRouter)({ db, authUser: { id } })
-
 it('should submit the note', async () => {
+  const caller2 = createCallerFactory(noteRouter)({ db, authUser: { id } })
   const levelId = 1
 
-  const questions = await questionRepository(db).findByLevel(levelId)
+  const questions = await questionRepository(db).findByLevel(1)
 
   const note = fakeNote({
     levelId,
@@ -41,4 +41,19 @@ it('should submit the note', async () => {
       question2: note.question2,
     },
   })
+})
+
+it('should throw error if user is not authenticated', async () => {
+  const caller2 = createCallerFactory(noteRouter)(requestContext({ db }))
+
+  const levelId = 1
+  const questions = await questionRepository(db).findByLevel(levelId)
+
+  const note = fakeNote({
+    levelId,
+    question1: questions[0].content,
+    question2: questions[1].content,
+  })
+
+  await expect(caller2.submit(note)).rejects.toThrow(/must log in/i)
 })

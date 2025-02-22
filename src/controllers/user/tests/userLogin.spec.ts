@@ -11,7 +11,6 @@ const caller = createCallerFactory(userRouter)({ db })
 
 
 it('should return the token', async () => {
-  // arrange
   const user = fakeUser({
     email: 'koldunas@gmail.com',
     password: 'verystrongpassword12369*',
@@ -19,14 +18,11 @@ it('should return the token', async () => {
 
   await caller.signup(user)
 
-  // act
-
   const response = await caller.login({
     email: 'koldunas@gmail.com',
     password: 'verystrongpassword12369*',
   })
 
-  // assert
   expect(response).toMatchObject({ accessToken: expect.any(String) })
   expect(response.accessToken.slice(0, 3)).toEqual('eyJ')
 })

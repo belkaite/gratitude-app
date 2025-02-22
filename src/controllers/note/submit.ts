@@ -7,6 +7,7 @@ import { tipRepository } from '@server/repositories/tipRepository'
 import { userTipRepository } from '@server/repositories/userTipRepository'
 import { noteSchema } from '../../entities/note'
 import { noteRepository } from '../../repositories/noteRepository'
+import { handleLevelUp, getTip } from './utils/handleLevelUp'
 
 export default authenticatedProcedure
   .use(
@@ -15,7 +16,7 @@ export default authenticatedProcedure
       questionRepository,
       noteRepository,
       tipRepository,
-      userTipRepository
+      userTipRepository,
     })
   )
   .input(noteSchema.pick({ answer1: true, answer2: true }))
@@ -31,7 +32,6 @@ export default authenticatedProcedure
     }
 
     const questions = await repos.questionRepository.findByLevel(user.level)
-
     if (questions.length !== 2) {
       throw new TRPCError({
         code: 'NOT_FOUND',
@@ -50,20 +50,9 @@ export default authenticatedProcedure
 
     const notesCount = await repos.noteRepository.countNotesByUser(authUser.id)
 
-    if (user.level < 3 && (notesCount === 15 || notesCount === 30)) {
-      const newLevel = user.level + 1
+    await handleLevelUp(user.level, authUser.id, notesCount, repos)
 
-      await repos.userRepository.updateLevel(authUser.id, newLevel)
-    }
-
-    const tip =
-      notesCount % 5 === 0
-        ? await repos.tipRepository.findByOrder(notesCount / 5)
-        : null
-
-    if (tip) {
-      await repos.userTipRepository.saveShownTip(authUser.id, tip.id)
-    }
+    const tip = await getTip(repos, notesCount, authUser.id)
 
     return {
       message: 'Note has been submitted successfully',

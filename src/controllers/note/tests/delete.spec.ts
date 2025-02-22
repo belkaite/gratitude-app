@@ -2,6 +2,7 @@ import { createTestDatabase } from '@tests/utils/database'
 import { wrapInRollbacks } from '@tests/utils/transactions'
 import { createCallerFactory } from '@server/trpc'
 import { fakeNote, fakeUser } from '@server/entities/tests/fakes'
+import { requestContext } from '@tests/utils/context'
 import userRouter from '../../user'
 import noteRouter from '..'
 
@@ -14,9 +15,8 @@ const user = fakeUser({
 const caller1 = createCallerFactory(userRouter)({ db })
 const { id } = await caller1.signup(user)
 
-const caller2 = createCallerFactory(noteRouter)({ db, authUser: { id } })
-
 it('should delete the note', async () => {
+  const caller2 = createCallerFactory(noteRouter)({ db, authUser: { id } })
   const note = fakeNote({ userId: id })
   const createdNote = await caller2.submit(note)
 
@@ -34,4 +34,15 @@ it('should delete the note', async () => {
       question2: expect.any(String),
     },
   })
+})
+
+it('should throw error if user is not authenticated', async () => {
+  const caller2 = createCallerFactory(noteRouter)(requestContext({ db }))
+
+  await expect(caller2.delete({ id: 1 })).rejects.toThrow(/must log in/i)
+})
+
+it('should throw error if note does not exist', async () => {
+  const caller2 = createCallerFactory(noteRouter)({ db, authUser: { id } })
+  await expect(caller2.delete({ id: 3000 })).rejects.toThrow(/not found/i)
 })

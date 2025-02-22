@@ -10,14 +10,9 @@ const db = await wrapInRollbacks(createTestDatabase())
 const caller = createCallerFactory(userRouter)({ db })
 
 it('should save the user', async () => {
-  // arrange
   const user = fakeUser()
 
-  // act
-
   const response = await caller.signup(user)
-
-  // assert
 
   const [userCreated] = await selectAll(db, 'user', (eb) =>
     eb('email', '=', user.email)
@@ -33,11 +28,8 @@ it('should save the user', async () => {
 })
 
 it('throws error when the email is invalid', async () => {
-  // arrange
 
   const user = fakeUser({ email: 'random-thing' })
-
-  // assert and assert
 
   await expect(caller.signup(user)).rejects.toThrow(/email/i)
 })
