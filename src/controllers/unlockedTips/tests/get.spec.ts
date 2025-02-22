@@ -42,3 +42,9 @@ it('should get the questions to the user', async () => {
     { content: expect.any(String), shownAt: expect.any(Date) },
   ])
 })
+
+it('should return an empty list if user has no unlocked tips', async () => {
+  const response = await caller2.get()
+
+  expect(response).toEqual([])
+})

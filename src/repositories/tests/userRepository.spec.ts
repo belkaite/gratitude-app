@@ -17,6 +17,7 @@ describe('create', () => {
       id: expect.any(Number),
       firstName: user.firstName,
       lastName: user.lastName,
+      level: 1,
     })
   })
 
