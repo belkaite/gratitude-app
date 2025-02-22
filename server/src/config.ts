@@ -57,7 +57,7 @@ const config = schema.parse({
   },
 
   ai: {
-    apiKey: env.OPENAI_API_KEY,
+    apiKey: env.OPENAIAPI_KEY,
   },
 
   database: {
