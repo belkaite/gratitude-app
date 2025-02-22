@@ -15,3 +15,8 @@ it('should return a tip to the user depending on the order', async () => {
     content: expect.any(String),
   })
 })
+
+it('should return undefined for when no tips exists for the order', async () => {
+  const tip = await repository.findByOrder(3000)
+  expect(tip).toBeUndefined()
+})

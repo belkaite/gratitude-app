@@ -32,10 +32,21 @@ it('should save and get the tip that was shown to the user', async () => {
 
   const savedTip = await repository.getShown(user.id)
 
+  expect(savedTip).toHaveLength(1)
   expect(savedTip).toMatchObject([
     {
       content: expect.any(String),
       shownAt: expect.any(Date),
     },
   ])
+})
+
+it('should throw error when saving a tip that does not exist', async () => {
+  const user = await userRepo.create(fakeUser())
+
+  const tipId = 3000
+
+  await expect(repository.saveShownTip(user.id, tipId)).rejects.toThrow(
+    /foreign key constraint/i
+  )
 })
