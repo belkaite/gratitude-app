@@ -26,6 +26,7 @@ This app tries to make gratitude journaling more engaging and motivating for end
 ### Motivational and educational elements
 
 - To keep users engaged and show that gratitude has real benefits, the app provides a scientific tip every 5 submitted notes.
+- User can review previously shown/unlocked tips.
 - Users receive AI-generated reflections from OpenAI based on their latest gratitude entry.
 
 ### Gratitude notes (CRUD)
