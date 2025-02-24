@@ -10,7 +10,7 @@ This app tries to make gratitude journaling more engaging and motivating for end
 
 ## Features and functionality
 
-# User authentication and progression
+### User authentication and progression
 
 - Users can sign up, log in and change their password.
 - After creating a profile, users start at Level 1.
@@ -18,17 +18,17 @@ This app tries to make gratitude journaling more engaging and motivating for end
 - Users progress to the next level after submitting 15 gratitude notes.
 - The highest level at this stage is Level 3, user stays in level 3.
 
-# Guided gratitude
+### Guided gratitude
 
 - Each level provides different sets of questions to help users develop a gratitude habit.
 - The questions are more specific and basic at Level 1 and gradually become more open ended at Level 3.
 
-# Motivational and educational elements
+### Motivational and educational elements
 
 - To keep users engaged and show that gratitude has real benefits, the app provides a scientific tip every 5 submitted notes.
 - Users receive AI-generated reflections from OpenAI based on their latest gratitude entry.
 
-# Gratitude notes (CRUD)
+### Gratitude notes (CRUD)
 
 Users can create, read, update and delete their gratitude journal entries.
 
@@ -39,7 +39,7 @@ Users can create, read, update and delete their gratitude journal entries.
 3. Submit your gratitude note based on the given questions.
 4. Progress through levels and receive motivational insights as you journal.
 
-### Techn stack
+## Techn stack
 
 - Backend: tRPC API, TypeScript, Node.js, Kysely, PostgreSQL, OpenAI API
 
