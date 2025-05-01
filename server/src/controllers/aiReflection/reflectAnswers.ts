@@ -17,5 +17,5 @@ export default authenticatedProcedure
       })
     }
 
-    return getAiReflection(lastAnswers?.answer1, lastAnswers?.answer2)
+    return getAiReflection(lastAnswers.answer1, lastAnswers.answer2)
   })

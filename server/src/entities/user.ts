@@ -21,7 +21,7 @@ export const userKeysPublic = ['id', 'firstName', 'lastName', 'level'] as const
 
 export type UserPublic = Pick<Selectable<User>, (typeof userKeysPublic)[number]>
 
-export const authUserSchema = userSchema.pick({ id: true })
+export const authUserSchema = userSchema.pick({ id: true, level:true})
 export type AuthUser = z.infer<typeof authUserSchema>
 
 export const changePasswordSchema = z.object({
