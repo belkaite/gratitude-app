@@ -26,5 +26,16 @@ services:
     depends_on:
       - postgres
 
+  client:
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+    environment:
+      API_PROXY_PASS: http://server:3000
+    ports:
+      - "30001:80"
+    depends_on:
+      - server
+
 volumes:
   gratitude_journal-postgres-data:
