@@ -1,0 +1,41 @@
+services:
+  # spin up a database
+  postgres:
+    image: postgres:16.1-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gratitude_journal
+    ports:
+      - "5432"
+    volumes:
+      - gratitude_journal-postgres-data:/var/lib/postgresql/data
+
+  # start up an API server
+  server:
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+    env_file:
+      - ./server/.env
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/gratitude_journal
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+
+  client:
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+    environment:
+      API_PROXY_PASS: http://server:3000
+    ports:
+      - "30001:80"
+    depends_on:
+      - server
+
+volumes:
+  gratitude_journal-postgres-data:
