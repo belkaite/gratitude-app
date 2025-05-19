@@ -1,4 +1,4 @@
-name: Test
+name: gratitude-app-workflow
 
 on: push
 
@@ -6,21 +6,16 @@ jobs:
   test:
     runs-on: ubuntu-22.04
     env:
-      # variables for our front-end tests, see client/src/config.ts
       VITE_API_ORIGIN: http://localhost:3000
       VITE_API_PATH: /api/v1/trpc
-
-      # variables for our back-end tests, see server/src/config.ts
-      DATABASE_URL: postgres://turing:turing@localhost:5432/testdb
+      DATABASE_URL: postgres://postgres:secret123@localhost:5432/gratitude_journal
     services:
-      # spin up a database for tests
       postgres:
         image: postgres:16.1-alpine
         env:
-          # Postgres will create a database with the following credentials
-          POSTGRES_USER: turing
-          POSTGRES_PASSWORD: turing
-          POSTGRES_DB: testdb
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: secret123
+          POSTGRES_DB: gratitude_journal
         ports:
           - 5432:5432
     steps:
@@ -42,7 +37,6 @@ jobs:
       - name: Type check client
         run: npm run typecheck -w=client
 
-      # Lint client code and server code.
       - name: Lint server
         run: npm run lint -w=server
 
@@ -58,7 +52,6 @@ jobs:
       - name: Database migrations
         run: npm run migrate:latest -w=server
 
-      # Run server tests.
       - name: Server unit tests
         run: npm run test -w=server
 
