@@ -156,11 +156,22 @@ jobs:
           --image $CLIENT_IMAGE_TAG
           --output yaml
 
-      - name: Get Lightsail image tag
+      # - name: Get Lightsail image tag
+      #   run: |
+      #     aws lightsail get-container-images --service-name ${{ vars.AWS_LIGHTSAIL_SERVICE }} | jq -r '.containerImages[] | select(.image | contains(".'$SERVER_IMAGE_TAG'")) | .image'
+      #     echo "LIGHTSAIL_SERVER_IMAGE=$(aws lightsail get-container-images --service-name ${{ vars.AWS_LIGHTSAIL_SERVICE }} | jq -r '.containerImages[] | select(.image | contains(".'$SERVER_IMAGE_TAG'")) | .image')" >> $GITHUB_ENV
+      #     echo "LIGHTSAIL_CLIENT_IMAGE=$(aws lightsail get-container-images --service-name ${{ vars.AWS_LIGHTSAIL_SERVICE }} | jq -r '.containerImages[] | select(.image | contains(".'$CLIENT_IMAGE_TAG'")) | .image')" >> $GITHUB_ENV
+      - name: Get Lightsail image tags
         run: |
-          aws lightsail get-container-images --service-name ${{ vars.AWS_LIGHTSAIL_SERVICE }} | jq -r '.containerImages[] | select(.image | contains(".'$SERVER_IMAGE_TAG'")) | .image'
-          echo "LIGHTSAIL_SERVER_IMAGE=$(aws lightsail get-container-images --service-name ${{ vars.AWS_LIGHTSAIL_SERVICE }} | jq -r '.containerImages[] | select(.image | contains(".'$SERVER_IMAGE_TAG'")) | .image')" >> $GITHUB_ENV
-          echo "LIGHTSAIL_CLIENT_IMAGE=$(aws lightsail get-container-images --service-name ${{ vars.AWS_LIGHTSAIL_SERVICE }} | jq -r '.containerImages[] | select(.image | contains(".'$CLIENT_IMAGE_TAG'")) | .image')" >> $GITHUB_ENV
+          SERVER_IMAGE=$(aws lightsail get-container-images --service-name ${{ vars.AWS_LIGHTSAIL_SERVICE }} | jq -r '.containerImages[] | select(.image | contains(".${{ env.SERVER_IMAGE_TAG }}")) | .image')
+          CLIENT_IMAGE=$(aws lightsail get-container-images --service-name ${{ vars.AWS_LIGHTSAIL_SERVICE }} | jq -r '.containerImages[] | select(.image | contains(".${{ env.CLIENT_IMAGE_TAG }}")) | .image')
+
+          # Remove leading colons if present
+          SERVER_IMAGE=${SERVER_IMAGE#:}
+          CLIENT_IMAGE=${CLIENT_IMAGE#:}
+
+          echo "LIGHTSAIL_SERVER_IMAGE=$SERVER_IMAGE" >> $GITHUB_ENV
+          echo "LIGHTSAIL_CLIENT_IMAGE=$CLIENT_IMAGE" >> $GITHUB_ENV
 
        # if you need to pass additional environment variables to the server,
       # then you will need to pass them as a json file:
@@ -189,7 +200,7 @@ jobs:
                 "TOKEN_KEY": "${{ secrets.TOKEN_KEY }}",
                 "TOKEN_EXPIRES_IN": "${{ secrets.TOKEN_EXPIRES_IN }}",
                 "PASSWORD_COST": "${{ secrets.PASSWORD_COST }}",
-                "OPENAIAPI_KEY": "${{ secrets.OPENAIAPI_KEY }}",
+                "OPENAIAPI_KEY": "${{ secrets.OPENAIAPI_KEY }}"
               }
             }
           }' > containers.json
