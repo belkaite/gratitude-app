@@ -100,30 +100,30 @@ jobs:
       #     path: client/playwright-report/
       #     retention-days: 7
 
-  build-deploy:
-    needs: test
-    runs-on: ubuntu-22.04
-    if: github.ref == 'refs/heads/main'
-    env:
-      CLIENT_IMAGE_TAG: client-${{ github.sha }}
-      SERVER_IMAGE_TAG: server-${{ github.sha }}
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
+  # build-deploy:
+  #   needs: test
+  #   runs-on: ubuntu-22.04
+  #   if: github.ref == 'refs/heads/main'
+  #   env:
+  #     CLIENT_IMAGE_TAG: client-${{ github.sha }}
+  #     SERVER_IMAGE_TAG: server-${{ github.sha }}
+  #   steps:
+  #     - name: Check out repository
+  #       uses: actions/checkout@v4
 
-      - name: Setup aws lightsail cli
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
-          which aws
-          aws --version
-          sudo curl "https://s3.us-west-2.amazonaws.com/lightsailctl/latest/linux-amd64/lightsailctl" -o "/usr/local/bin/lightsailctl"
-          sudo chmod +x /usr/local/bin/lightsailctl
+  #     - name: Setup aws lightsail cli
+  #       run: |
+  #         curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  #         unzip awscliv2.zip
+  #         sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+  #         which aws
+  #         aws --version
+  #         sudo curl "https://s3.us-west-2.amazonaws.com/lightsailctl/latest/linux-amd64/lightsailctl" -o "/usr/local/bin/lightsailctl"
+  #         sudo chmod +x /usr/local/bin/lightsailctl
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ vars.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         aws-region: ${{ vars.AWS_REGION }}
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
