@@ -64,7 +64,7 @@ describe('findById', () => {
   })
 
   it('should return undefined id user id does not exit', async () => {
-    const user = await repository.findById(1)
+    const user = await repository.findById(9999)
 
     expect(user).toBeUndefined()
   })
