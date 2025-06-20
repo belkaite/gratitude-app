@@ -1,22 +1,30 @@
 <script lang="ts" setup>
 import { ref, defineProps } from 'vue'
 
-const props = defineProps<{
+const email = ref('')
+const password = ref('')
+
+defineProps<{
   heading: string
 }>()
 
-const email = ref('')
-const password = ref('')
+const emit = defineEmits<{
+  submit: [{ email: string; password: string }]
+}>()
+
+function onSubmit() {
+  emit('submit', { email: email.value, password: password.value })
+}
 </script>
 
 <template>
   <div class="login">
-    <h1 class="font-lemon login__heading">Log in</h1>
+    <h1 class="font-lemon login__heading">{{ heading }}</h1>
     <p class="login__description">
       Log in with your data that your entered during your registration:
     </p>
 
-    <form class="login__form" autocomplete="off">
+    <form class="login__form" autocomplete="off" @submit.prevent="onSubmit">
       <label class="login__form-title">Enter your email address</label>
       <input
         v-model="email"
@@ -96,6 +104,7 @@ const password = ref('')
   padding-inline: 2rem;
   border: 2px solid;
   border-radius: 30px;
+  cursor: pointer;
 }
 
 .login__signup-wrapper {
