@@ -19,7 +19,7 @@ export default publicProcedure
     if (!user) {
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: 'We could not find your account with this email address',
+        message: 'We could not find your account with this email address. Please try again or create a new account.',
       })
     }
 

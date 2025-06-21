@@ -6,6 +6,7 @@ const password = ref('')
 
 defineProps<{
   heading: string
+  error?: string
 }>()
 
 const emit = defineEmits<{
@@ -43,6 +44,10 @@ function onSubmit() {
       />
       <input type="submit" value="Log in" class="login__submit" />
     </form>
+    <p class="login__error" v-if="error">
+      <img src="../assets/icons/warning-icon.svg" />
+      {{ error }}
+    </p>
     <div class="login__signup-wrapper">
       <p class="login__description">Don't have an account?</p>
       <button type="button" class="login__signup">Sign up now</button>
@@ -57,7 +62,7 @@ function onSubmit() {
 }
 
 .login__heading {
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: #e01c8b;
 }
 
@@ -112,5 +117,18 @@ function onSubmit() {
   flex-direction: column;
   align-items: center;
   margin-top: 2rem;
+}
+
+.login__error {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  border: 2px solid;
+  border-radius: 5px;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  margin-top: 2rem;
+  background-color: #ffe6e6;
+  color: #a00404;
 }
 </style>
