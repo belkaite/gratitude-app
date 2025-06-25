@@ -1,20 +1,44 @@
 <script lang="ts" setup>
 import { ref, defineProps } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const email = ref('')
 const password = ref('')
+const firstName = ref('')
+const lastName = ref('')
 
-defineProps<{
+const props = defineProps<{
   heading: string
   error?: string
+  success?: boolean
+  showNameValues?: boolean
+  showSignUp?: boolean
+  showLoginButton?: boolean
+  showSignUpButton?: boolean
 }>()
 
 const emit = defineEmits<{
-  submit: [{ email: string; password: string }]
+  submitLogin: [{ email: string; password: string }]
+  submitSignup: [{ firstName: string; lastName: string; email: string; password: string }]
 }>()
 
 function onSubmit() {
-  emit('submit', { email: email.value, password: password.value })
+  if (props.showNameValues) {
+    emit('submitSignup', {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      email: email.value,
+      password: password.value,
+    })
+  } else {
+    emit('submitLogin', { email: email.value, password: password.value })
+  }
+}
+
+function goToSignUp() {
+  router.push('/signup')
 }
 </script>
 
@@ -26,7 +50,13 @@ function onSubmit() {
     </p>
 
     <form class="login__form" autocomplete="off" @submit.prevent="onSubmit">
-      <label class="login__form-title">Enter your email address</label>
+      <div v-if="showNameValues" class="login__form">
+        <label class="login__form-title">First Name*</label>
+        <input v-model="firstName" class="login__form-fields" placeholder="Sara" required />
+        <label class="login__form-title">Last Name*</label>
+        <input v-model="lastName" class="login__form-fields" placeholder="Austin" required />
+      </div>
+      <label class="login__form-title">Enter your email address*</label>
       <input
         v-model="email"
         type="email"
@@ -34,7 +64,7 @@ function onSubmit() {
         required
         class="login__form-fields"
       />
-      <label class="login__form-title">Enter your password</label>
+      <label class="login__form-title">Enter your password*</label>
       <input
         v-model="password"
         type="password"
@@ -42,15 +72,17 @@ function onSubmit() {
         required
         class="login__form-fields"
       />
-      <input type="submit" value="Log in" class="login__submit" />
+      <input v-if="showLoginButton" type="submit" value="Log in" class="login__submit" />
+      <input v-if="showSignUpButton" type="submit" value="Sign up" class="login__submit" />
     </form>
     <p class="login__error" v-if="error">
       <img src="../assets/icons/warning-icon.svg" />
       {{ error }}
     </p>
-    <div class="login__signup-wrapper">
+    <p class="login__success" v-if="success">Yay! You have registered successfully. 🎉</p>
+    <div class="login__signup-wrapper" v-if="showSignUp">
       <p class="login__description">Don't have an account?</p>
-      <button type="button" class="login__signup">Sign up now</button>
+      <button type="button" class="login__signup" @click="goToSignUp">Sign up now</button>
     </div>
   </div>
 </template>
@@ -130,5 +162,14 @@ function onSubmit() {
   margin-top: 2rem;
   background-color: #ffe6e6;
   color: #a00404;
+}
+
+.login__success {
+  border: 2px solid;
+  border-radius: 5px;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  background-color: #e6fffc;
+  color: #025e52;
 }
 </style>

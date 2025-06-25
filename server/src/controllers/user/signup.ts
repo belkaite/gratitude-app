@@ -35,7 +35,7 @@ export default publicProcedure
         if (error.message.includes('duplicate key')) {
           throw new TRPCError({
             code: 'BAD_REQUEST',
-            message: 'User with this email already exists',
+            message: 'User with this email already exists. Please sign up with another email.',
             cause: error,
           })
         }
