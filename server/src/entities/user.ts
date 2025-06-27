@@ -9,8 +9,8 @@ export const userSchema = z.object({
   email: z.string().trim().email().toLowerCase(),
   password: z
     .string()
-    .min(8, 'Password must be at least 8 characters long')
-    .max(64, 'Password must be at most 64 characters long'),
+    .min(8, 'Password must be at least 8 characters long.')
+    .max(64, 'Password must be at most 64 characters long.'),
   level: z.number().int().positive(),
 })
 

@@ -10,6 +10,7 @@ const firstName = ref('')
 const lastName = ref('')
 
 const props = defineProps<{
+  description: string
   heading: string
   error?: string
   success?: boolean
@@ -17,6 +18,7 @@ const props = defineProps<{
   showSignUp?: boolean
   showLoginButton?: boolean
   showSignUpButton?: boolean
+  showLogin?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -40,13 +42,17 @@ function onSubmit() {
 function goToSignUp() {
   router.push('/signup')
 }
+
+function goToLogIn() {
+  router.push('/login')
+}
 </script>
 
 <template>
   <div class="login">
     <h1 class="font-lemon login__heading">{{ heading }}</h1>
     <p class="login__description">
-      Log in with your data that your entered during your registration:
+      {{ description }}
     </p>
 
     <form class="login__form" autocomplete="off" @submit.prevent="onSubmit">
@@ -79,7 +85,11 @@ function goToSignUp() {
       <img src="../assets/icons/warning-icon.svg" />
       {{ error }}
     </p>
-    <p class="login__success" v-if="success">Yay! You have registered successfully. 🎉</p>
+    <p class="login__success" v-if="success">You have registered successfully. 🎉</p>
+    <div class="login__signup-wrapper" v-if="showLogin">
+      <p class="login__description">Already registered?</p>
+      <button type="button" class="login__signup" @click="goToLogIn">Log in</button>
+    </div>
     <div class="login__signup-wrapper" v-if="showSignUp">
       <p class="login__description">Don't have an account?</p>
       <button type="button" class="login__signup" @click="goToSignUp">Sign up now</button>
@@ -171,5 +181,6 @@ function goToSignUp() {
   padding-inline: 1rem;
   background-color: #e6fffc;
   color: #025e52;
+  margin-top: 2rem;
 }
 </style>

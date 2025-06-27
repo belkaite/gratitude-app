@@ -18,6 +18,7 @@ async function submitLogin(payload: { email: string; password: string }) {
 
 <template>
   <PageForm
+  description="Log in with your data that your entered during your registration:"
     heading="Log in"
     @submitLogin="submitLogin"
     :error="errorMessage"
