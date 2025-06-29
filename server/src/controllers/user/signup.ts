@@ -4,7 +4,7 @@ import { userRepository } from '@server/repositories/userRepository'
 import { userSchema } from '@server/entities/user'
 import { hash } from 'bcrypt'
 import config from '@server/config'
-import { assertError } from '@server/utils/errors'
+// import { assertError } from '@server/utils/errors'
 import { TRPCError } from '@trpc/server'
 
 export default publicProcedure
@@ -20,6 +20,16 @@ export default publicProcedure
   .mutation(async ({ input, ctx: { repos } }) => {
     const { email, password, firstName, lastName } = input
 
+    const existingUser = await repos.userRepository.findByEmail(email)
+  
+    if (existingUser) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message:
+          'User with this email already exists. Please sign up with another email.',
+      })
+    }
+
     const hashedPassword = await hash(password, config.auth.passwordCost)
 
     const newUser = await repos.userRepository
@@ -29,19 +39,7 @@ export default publicProcedure
         firstName,
         lastName,
       })
-      .catch((error: unknown) => {
-        assertError(error)
 
-        if (error.message.includes('duplicate key')) {
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: 'User with this email already exists',
-            cause: error,
-          })
-        }
-
-        throw error
-      })
 
     return { id: newUser.id }
   })
