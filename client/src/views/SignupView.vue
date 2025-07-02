@@ -3,6 +3,7 @@ import PageForm from '@/components/PageForm.vue'
 import { trpc } from '@/trpc'
 import { ref } from 'vue'
 import { DEFAULT_SERVER_ERROR } from '../consts'
+import AuthPageLayout from '@/layouts/AuthPageLayout.vue'
 
 const successMessage = ref(false)
 const errorMessage = ref('')
@@ -35,14 +36,22 @@ async function submitSignUp(payload: {
 </script>
 
 <template>
-  <PageForm
-    heading="Sign up"
-    description="Enter your data to finish registration:"
-    :show-name-values="true"
-    :show-sign-up-button="true"
-    @submit-signup="submitSignUp"
-    :error="errorMessage"
-    :success="successMessage"
-    :show-login="true"
-  />
+  <AuthPageLayout>
+    <template #left>
+      <p>
+        Start your journey toward a more grateful life. This digital journal is your space to slow
+        down, reflect and find joy in the little things.
+      </p>
+    </template>
+    <PageForm
+      heading="Sign up"
+      description="Enter your data to finish registration:"
+      :show-name-values="true"
+      :show-sign-up-button="true"
+      @submit-signup="submitSignUp"
+      :error="errorMessage"
+      :success="successMessage"
+      :show-login="true"
+    />
+  </AuthPageLayout>
 </template>

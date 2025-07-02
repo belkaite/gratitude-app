@@ -56,7 +56,7 @@ function goToLogIn() {
     </p>
 
     <form class="login__form" autocomplete="off" @submit.prevent="onSubmit">
-      <div v-if="showNameValues" class="login__form">
+      <div v-if="showNameValues" class="login__form-name-group">
         <label class="login__form-title">First Name*</label>
         <input v-model="firstName" class="login__form-fields" placeholder="Sara" required />
         <label class="login__form-title">Last Name*</label>
@@ -99,8 +99,16 @@ function goToLogIn() {
 
 <style scoped>
 .login {
-  margin: 2rem;
+  padding: 2rem;
   max-width: 40rem;
+  width: 100%;
+  margin-left: 2rem;
+}
+
+.login__form-name-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .login__heading {
