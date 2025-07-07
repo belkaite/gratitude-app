@@ -4,6 +4,9 @@ import PageForm from '@/components/PageForm.vue'
 import { trpc } from '@/trpc'
 import { storeAccessToken } from '../utils/auth'
 import AuthPageLayout from '@/layouts/AuthPageLayout.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const errorMessage = ref('')
 
@@ -11,6 +14,7 @@ async function submitLogin(payload: { email: string; password: string }) {
   try {
     const res = trpc.user.login.mutate(payload)
     storeAccessToken(localStorage, (await res).accessToken)
+    router.push('/home')
   } catch (err: any) {
     errorMessage.value = err?.message
   }
@@ -21,8 +25,8 @@ async function submitLogin(payload: { email: string; password: string }) {
   <AuthPageLayout>
     <template #left>
       <p>
-        Welcome back! Log in to continue your journey toward a more grateful life. Even
-        the smallest moments are worth noticing - and your digital journal is here to help you capture them.
+        Welcome back! Log in to continue your journey toward a more grateful life. Even the smallest
+        moments are worth noticing - and your digital journal is here to help you capture them.
       </p>
     </template>
     <PageForm

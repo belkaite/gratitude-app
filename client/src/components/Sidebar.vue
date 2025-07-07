@@ -1,7 +1,15 @@
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router'
-const homeIconWhite = new URL('../assets/icons/home-icon.svg', import.meta.url).href
+
+const homeIconLight = new URL('../assets/icons/home-icon.svg', import.meta.url).href
 const homeIconBlue = new URL('../assets/icons/home_icon_blue.svg', import.meta.url).href
+const penIconLight = new URL('../assets/icons/pen_icon.svg', import.meta.url).href
+const penIconBlue = new URL('../assets/icons/pen_icon_blue.svg', import.meta.url).href
+const lampBulbLight = new URL('../assets/icons/lamp_bulb.svg', import.meta.url).href
+const lampBulbBlue = new URL('../assets/icons/lamp_bulb_icon_blue.svg', import.meta.url).href
+const questionMarkLight = new URL('../assets/icons/question_mark_icon.svg', import.meta.url).href
+const questionMarkBlue = new URL('../assets/icons/question_mark_icon_blue.svg', import.meta.url)
+  .href
 </script>
 
 <template>
@@ -11,20 +19,20 @@ const homeIconBlue = new URL('../assets/icons/home_icon_blue.svg', import.meta.u
     </div>
     <nav class="sidebar-navigation">
       <RouterLink to="/home" class="sidebar-link" activeClass="sidebar-link--active">
-        <img :src="$route.path === '/home' ? homeIconBlue : homeIconWhite" />
+        <img :src="$route.path === '/home' ? homeIconBlue : homeIconLight" />
 
         Home</RouterLink
       >
       <RouterLink to="/notes" class="sidebar-link" activeClass="sidebar-link--active">
-        <img src="../assets/icons/pen_icon.svg" />
+        <img :src="$route.path === '/notes' ? penIconBlue : penIconLight" />
         Notes</RouterLink
       >
       <RouterLink to="/tips" class="sidebar-link" activeClass="sidebar-link--active">
-        <img src="../assets/icons/lamp_bulb.svg" />
+        <img :src="$route.path === '/tips' ? lampBulbBlue : lampBulbLight" />
         Tips</RouterLink
       >
       <RouterLink to="/about" class="sidebar-link" activeClass="sidebar-link--active">
-        <img src="../assets/icons/question_mark_icon.svg" />
+        <img :src="$route.path === '/about' ? questionMarkBlue : questionMarkLight" />
         About</RouterLink
       >
     </nav>
