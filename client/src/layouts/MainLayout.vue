@@ -1,12 +1,22 @@
 <script lang="ts" setup>
-// import { trpc } from '@/trpc'
-// import { ref, onMounted } from 'vue'
+import { watch } from 'vue'
+import { useUserStore } from '@/stores/user'
 
-// const user = ref()
 
-// onMounted(async () => {
-//   user.value = await trpc.user.getUser.query()
-// })
+const store = useUserStore()
+
+watch(
+  () => store.authToken,
+  async (newToken) => {
+    if (newToken) {
+      await store.fetchUser()
+    } else {
+      store.user = null
+    }
+  },
+  { immediate: true }
+)
+
 </script>
 
 <template>
@@ -16,10 +26,10 @@
     </div>
     <div class="main__layout-right">
       <div class="main__layout-right-header">
-        <div class="main__layout-right-title">Hello Sara</div>
+        <div class="main__layout-right-title">Hello, {{ store.user?.firstName }}</div>
         <div class="main__layout-right-user__profile">
           <img src="../assets/icons/user-profile-icon.svg" />
-          <div>Sara Austen</div>
+          <div>{{ store.user?.firstName }} {{ store.user?.lastName }}</div>
           <img src="../assets/icons/arrow_down.svg" />
         </div>
       </div>
@@ -45,6 +55,7 @@
 .main__layout-right-header {
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
 }
 

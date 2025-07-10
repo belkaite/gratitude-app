@@ -1,19 +1,19 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import PageForm from '@/components/PageForm.vue'
-import { trpc } from '@/trpc'
-import { storeAccessToken } from '../utils/auth'
 import AuthPageLayout from '@/layouts/AuthPageLayout.vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
 
 const errorMessage = ref('')
 
+const store = useUserStore()
+
 async function submitLogin(payload: { email: string; password: string }) {
   try {
-    const res = trpc.user.login.mutate(payload)
-    storeAccessToken(localStorage, (await res).accessToken)
+    store.login(payload)
     router.push('/home')
   } catch (err: any) {
     errorMessage.value = err?.message
