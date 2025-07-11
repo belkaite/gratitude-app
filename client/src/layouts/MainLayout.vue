@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { watch, ref } from 'vue'
 import { useUserStore } from '@/stores/user'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const store = useUserStore()
 const showLogout = ref(false)
@@ -12,6 +15,7 @@ watch(
       await store.fetchUser()
     } else {
       store.user = null
+      router.push('/login')
     }
   },
   { immediate: true }
@@ -27,7 +31,7 @@ function logoutUser() {
 </script>
 
 <template>
-  <div class="main__layout">
+  <div v-if="store.isLoggedin" class="main__layout">
     <div class="main__layout-left">
       <slot name="navigation"></slot>
     </div>
@@ -52,6 +56,9 @@ function logoutUser() {
       </div>
       <RouterView></RouterView>
     </div>
+  </div>
+  <div v-if="!store.isLoggedin">
+    <RouterLink to="/login"></RouterLink>
   </div>
 </template>
 

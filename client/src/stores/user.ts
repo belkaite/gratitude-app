@@ -1,7 +1,7 @@
 import { getStoredAccessToken, storeAccessToken, clearStoredAccessToken } from '@/utils/auth'
 import { defineStore } from 'pinia'
 import { trpc } from '@/trpc'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 export const useUserStore = defineStore('user', () => {
   const authToken = ref(getStoredAccessToken(localStorage))
@@ -32,7 +32,7 @@ export const useUserStore = defineStore('user', () => {
     clearStoredAccessToken(localStorage)
   }
 
-  //   const authUserId = computed(() => (authToken.value ? getUserFromToken(authToken.value) : null))
+  const isLoggedin = computed(() => authToken.value)
 
   return {
     authToken,
@@ -41,5 +41,6 @@ export const useUserStore = defineStore('user', () => {
     fetchUser,
     user,
     logout,
+    isLoggedin,
   }
 })
