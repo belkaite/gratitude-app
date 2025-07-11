@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import PageForm from '@/components/PageForm.vue'
-import { trpc } from '@/trpc'
 import { ref } from 'vue'
 import { DEFAULT_SERVER_ERROR } from '../consts'
 import AuthPageLayout from '@/layouts/AuthPageLayout.vue'
+import { useUserStore } from '@/stores/user'
 
 const successMessage = ref(false)
 const errorMessage = ref('')
+const store = useUserStore()
 
 async function submitSignUp(payload: {
   firstName: string
@@ -15,7 +16,7 @@ async function submitSignUp(payload: {
   password: string
 }) {
   try {
-    const { id } = await trpc.user.signup.mutate(payload)
+    const { id } = await store.signup(payload)
 
     if (id) {
       successMessage.value = true
