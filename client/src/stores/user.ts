@@ -1,4 +1,4 @@
-import { getStoredAccessToken, storeAccessToken } from '@/utils/auth'
+import { getStoredAccessToken, storeAccessToken, clearStoredAccessToken } from '@/utils/auth'
 import { defineStore } from 'pinia'
 import { trpc } from '@/trpc'
 import { ref } from 'vue'
@@ -27,6 +27,11 @@ export const useUserStore = defineStore('user', () => {
     user.value = await trpc.user.getUser.query()
   }
 
+  function logout() {
+    authToken.value = null
+    clearStoredAccessToken(localStorage)
+  }
+
   //   const authUserId = computed(() => (authToken.value ? getUserFromToken(authToken.value) : null))
 
   return {
@@ -35,5 +40,6 @@ export const useUserStore = defineStore('user', () => {
     signup,
     fetchUser,
     user,
+    logout,
   }
 })

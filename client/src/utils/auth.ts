@@ -13,3 +13,7 @@ export function storeAccessToken(storage: Storage, token: string) {
 export function getUserFromToken(token: string): AuthUser {
   return JSON.parse(atob(token.split('.')[1])).user
 }
+
+export function clearStoredAccessToken(storage: Storage) {
+  return storage.removeItem(TOKEN_KEY)
+}
