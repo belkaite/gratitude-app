@@ -1,5 +1,5 @@
 import type { Database } from '@server/database'
-import type { User } from '@server/database/types'
+import type { User, UserWithLevelName } from '@server/database/types'
 import {
   type UserPublic,
   userKeysAll,
@@ -27,10 +27,19 @@ export function userRepository(db: Database) {
       return user
     },
 
-    async findById(id: number): Promise<Selectable<User> | undefined> {
+    async findById(
+      id: number
+    ): Promise<Selectable<UserWithLevelName> | undefined> {
       return db
         .selectFrom('user')
-        .select(userKeysAll)
+        .innerJoin('level', 'level.id', 'user.level')
+        .select([
+          'user.email',
+          'user.firstName',
+          'user.lastName',
+          'user.level',
+          'level.name as levelName',
+        ])
         .where('user.id', '=', id)
         .executeTakeFirst()
     },
