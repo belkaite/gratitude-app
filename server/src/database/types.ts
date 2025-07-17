@@ -61,3 +61,13 @@ export interface DB {
   user: User
   userTip: UserTip
 }
+
+export interface UserWithLevelName {
+  id: Generated<number>
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  level: number
+  levelName: string
+}

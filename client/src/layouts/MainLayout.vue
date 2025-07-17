@@ -31,29 +31,30 @@ function logoutUser() {
 </script>
 
 <template>
-  <div v-if="store.isLoggedin" class="main__layout">
-    <div class="main__layout-left">
+  <div v-if="store.isLoggedin" class="main-layout">
+    <div class="main-layout__left">
       <slot name="navigation"></slot>
     </div>
-    <div class="main__layout-right">
-      <div class="main__layout-right-header">
-        <div class="main__layout-right-title">Hello, {{ store.user?.firstName }}</div>
-        <div class="main__layout-right-user__profile">
+    <div class="main-layout__right">
+      <div class="main-layout__right-header">
+        <div class="main-layout__right-title">Hello, {{ store.user?.firstName }}</div>
+        <div class="main-layout__right-user-profile">
           <img src="../assets/icons/user-profile-icon.svg" />
 
           <div>{{ store.user?.firstName }} {{ store.user?.lastName }}</div>
-          <div class="main__layout-right-clickable-part">
-            <button type="button" class="main__layout-right-button" @click="clickOnArrow">
+          <div class="main-layout__right-clickable-part">
+            <button type="button" class="main-layout__right-button" @click="clickOnArrow">
               <img src="../assets/icons/arrow_down.svg" />
             </button>
-            <div v-if="showLogout" class="main__layout-right-logout-box">
-              <button type="button" class="main__layout-right-logout-box-title" @click="logoutUser">
+            <div v-if="showLogout" class="main-layout__right-logout-box">
+              <button type="button" class="main-layout__right-logout-box-title" @click="logoutUser">
                 Log out
               </button>
             </div>
           </div>
         </div>
       </div>
+      <slot name="page-content"></slot>
       <RouterView></RouterView>
     </div>
   </div>
@@ -63,34 +64,34 @@ function logoutUser() {
 </template>
 
 <style scoped>
-.main__layout {
+.main-layout {
   display: flex;
   flex-direction: row;
 }
-.main__layout-left {
-  width: 25%;
+.main-layout__left {
+  width: 25rem;
 }
 
-.main__layout-right {
+.main-layout__right {
   background-color: #f5f5f5;
   width: 75%;
 }
 
-.main__layout-right-header {
+.main-layout__right-header {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
 
-.main__layout-right-title {
+.main-layout__right-title {
   color: #55555b;
   font-weight: 700;
   font-size: 1.5rem;
   margin: 2rem 4rem;
 }
 
-.main__layout-right-user__profile {
+.main-layout__right-user-profile {
   display: flex;
   position: relative;
   flex-direction: row;
@@ -104,12 +105,12 @@ function logoutUser() {
   border-radius: 30px;
 }
 
-.main__layout-right-button {
+.main-layout__right-button {
   cursor: pointer;
   padding: 1rem;
 }
 
-.main__layout-right-logout-box {
+.main-layout__right-logout-box {
   padding: 1.5rem 4rem;
   background-color: #ffffff;
   margin: 0.5rem;
@@ -121,12 +122,12 @@ function logoutUser() {
   font-weight: 600;
 }
 
-.main__layout-right-logout-box-title {
+.main-layout__right-logout-box-title {
   cursor: pointer;
   padding: 1rem;
 }
 
-.main__layout-right-clickable-part {
+.main-layout__right-clickable-part {
   display: flex;
   flex-direction: column;
 }
