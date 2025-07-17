@@ -34,7 +34,9 @@ export function userRepository(db: Database) {
         .selectFrom('user')
         .innerJoin('level', 'level.id', 'user.level')
         .select([
+          'user.id',
           'user.email',
+          'user.password',
           'user.firstName',
           'user.lastName',
           'user.level',

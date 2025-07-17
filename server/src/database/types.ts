@@ -63,7 +63,9 @@ export interface DB {
 }
 
 export interface UserWithLevelName {
+  id: Generated<number>
   email: string
+  password: string
   firstName: string
   lastName: string
   level: number
