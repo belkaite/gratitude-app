@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { watch, ref } from 'vue'
+import { watch, ref, defineProps } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 
@@ -7,6 +7,8 @@ const router = useRouter()
 
 const store = useUserStore()
 const showLogout = ref(false)
+
+defineProps<{ pageTitle: string }>()
 
 watch(
   () => store.authToken,
@@ -37,7 +39,7 @@ function logoutUser() {
     </div>
     <div class="main-layout__right">
       <div class="main-layout__right-header">
-        <div class="main-layout__right-title">Hello, {{ store.user?.firstName }}</div>
+        <div class="main-layout__right-title">{{ pageTitle }} {{ store.user?.firstName }}</div>
         <div class="main-layout__right-user-profile">
           <img src="../assets/icons/user-profile-icon.svg" />
 

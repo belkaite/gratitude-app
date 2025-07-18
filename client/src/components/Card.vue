@@ -1,11 +1,16 @@
 <script lang="ts" setup>
 import { defineProps } from 'vue'
 
-defineProps<{ title: string }>()
+defineProps<{
+  title: string
+  width?: string
+  height?: string
+}>()
+
 </script>
 
 <template>
-  <div class="home-card">
+  <div class="home-card" :style="{ width, height }">
     <div class="home-card__title">
       <h3>{{ title }}</h3>
       <slot></slot>
@@ -16,8 +21,6 @@ defineProps<{ title: string }>()
 <style scoped>
 .home-card {
   background-color: #ffffff;
-  height: 20rem;
-  width: 32rem;
   border-radius: 20px;
   box-shadow: 0.25px 0.25px 20px 0.5px rgba(0, 0, 0, 0.1);
 }
