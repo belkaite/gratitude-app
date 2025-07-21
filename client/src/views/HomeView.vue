@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import MainLayout from '@/layouts/MainLayout.vue'
 import Sidebar from '@/components/Sidebar.vue'
-import HomeCard from '@/components/HomeCard.vue'
+import Card from '@/components/Card.vue'
 import { useUserStore } from '@/stores/user'
 import { useNoteStore } from '@/stores/note'
 import { onMounted } from 'vue'
@@ -16,7 +16,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <MainLayout>
+  <MainLayout page-title="Hello, ">
     <template #navigation>
       <Sidebar></Sidebar>
     </template>
@@ -24,15 +24,15 @@ onMounted(() => {
     <template #page-content>
       <div class="home-view">
         <div>
-          <HomeCard title="Your progress"
+          <Card title="Your progress" width="32rem" height="20rem"
             ><div class="home-view__labels">Level</div>
             <div class="home-view__progress-values">{{ userStore.user?.levelName }}</div>
             <div class="home-view__labels">Notes submitted</div>
-            <div class="home-view__progress-values">{{ noteStore.noteCount }}</div></HomeCard
+            <div class="home-view__progress-values">{{ noteStore.noteCount }}</div></Card
           >
         </div>
         <div>
-          <HomeCard title="About Grati">
+          <Card title="About Grati" width="32rem" height="20rem">
             <div class="home-view__about-text">
               Gratitude is a scientifically proven thing that helps improve well being.
               <br />Instead of writing in a physical journal, decided to create a digital version of
@@ -45,10 +45,10 @@ onMounted(() => {
                 <button>Learn more</button> <img src="../assets/icons/arrow-right.svg" />
               </div>
             </RouterLink>
-          </HomeCard>
+          </Card>
         </div>
-        <div><HomeCard title="Your recent note"></HomeCard></div>
-        <div><HomeCard title="Unlocked tips"></HomeCard></div>
+        <div><Card title="Your recent note" width="32rem" height="20rem"></Card></div>
+        <div><Card title="Unlocked tips" width="32rem" height="20rem"></Card></div>
       </div>
     </template>
   </MainLayout>

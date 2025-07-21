@@ -43,7 +43,7 @@ const questionMarkBlue = new URL('../assets/icons/question_mark_icon_blue.svg', 
 .sidebar {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   background-color: #060077;
 }
 

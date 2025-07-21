@@ -4,7 +4,7 @@ import MainLayout from '@/layouts/MainLayout.vue'
 </script>
 
 <template>
-  <MainLayout>
+  <MainLayout page-title="Science based tips for you, ">
     <template #navigation>
       <Sidebar></Sidebar>
     </template>
