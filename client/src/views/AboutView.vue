@@ -12,7 +12,7 @@ import FeatureBox from '@/components/FeatureBox.vue'
     </template>
     <template #page-content>
       <div class="about-view">
-        <Card title="About Grati" width="55rem" height="65rem">
+        <Card title="About Grati" max-width="50rem" height="65rem">
           <div class="about-view__about-text">
             Grati is your digital gratitude sidekick. It helps you slow down, look around, and
             remember the good stuff — even on weird days.<br />
@@ -26,28 +26,28 @@ import FeatureBox from '@/components/FeatureBox.vue'
           <div class="about-view__title">How it works</div>
           <div class="about-view__box-layout">
             <FeatureBox
-              title="Start at Level 1"
+              title="🪜 Start at Level 1"
               text="Just signed up? Awesome. You begin at Level 1 with simple prompts like:
 “What made you smile today?”"
             >
             </FeatureBox>
             <FeatureBox
-              title="Answer 2 questions"
+              title="🙋🏼‍♀️ Answer 2 questions"
               text="Each time you journal, you’ll answer 2 guided questions. It only takes a few minutes."
             >
             </FeatureBox>
             <FeatureBox
-              title="Level up after every 15 notes"
+              title="🆙 Level up after every 15 notes"
               text="Submit 15 gratitude notes to unlock the next level.There are 3 levels in total — questions get deeper and more thoughtful as you grow."
             >
             </FeatureBox>
             <FeatureBox
-              title="Unlock tips every 5 entries"
+              title="🔑 Unlock tips every 5 entries"
               text="Every 5 notes, you will get a science-based tip on how gratitude rewires your brain and boosts your life.(You can re-read all unlocked tips anytime!)"
             >
             </FeatureBox>
             <FeatureBox
-              title="Bonus: AI reflections"
+              title="🧸 Bonus: AI reflections"
               text="After you submit a note, Grati's friendly AI bot reflects back your entry with a short response — like a cozy pat on the back."
             >
             </FeatureBox>
@@ -65,6 +65,8 @@ import FeatureBox from '@/components/FeatureBox.vue'
 
 <style scoped>
 .about-view {
+  display: flex;
+  justify-content: center;
   margin: 4rem;
 }
 
@@ -73,26 +75,28 @@ import FeatureBox from '@/components/FeatureBox.vue'
   font-size: 1rem;
   font-weight: 400;
   text-align: justify;
-  margin-block: 1rem;
 }
 
 .about-view__line-break {
   border: none;
   border-top: 5px solid #eaeaec;
   border-radius: 3px;
-  margin: 3rem 0;
+  margin: 2rem 0;
 }
 
 .about-view__title {
   color: #55555b;
   font-weight: 600;
   font-size: 1.25rem;
-  padding-block: 2rem;
+  padding-top: 3rem;
+  padding-bottom: 1rem;
 }
 
 .about-view__box-layout {
   display: flex;
   flex-direction: row;
   gap: 20px;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
 }
 </style>

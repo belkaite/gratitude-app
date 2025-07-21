@@ -22,20 +22,21 @@ defineProps<{ title: string; text: string }>()
   height: 15rem;
   width: 15rem;
   font-weight: 15rem;
+  flex-shrink: 0;
 }
 
 .feature-title {
   color: white;
   font-size: 1rem;
   font-weight: 500;
-  padding: 1rem;
+  padding: 1rem 1rem;
 }
 
 .feature-text {
   color: white;
   font-weight: 300;
   font-size: 1rem;
-  padding: 1rem;
+  padding: 1rem 1rem;
   text-align: start;
 }
 </style>
