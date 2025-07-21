@@ -4,7 +4,7 @@ import MainLayout from '@/layouts/MainLayout.vue'
 </script>
 
 <template>
-  <MainLayout>
+  <MainLayout page-title="Your grateful moments, ">
     <template #navigation>
       <Sidebar></Sidebar>
     </template>
