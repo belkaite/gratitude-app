@@ -3,14 +3,14 @@ import { defineProps } from 'vue'
 
 defineProps<{
   title: string
-  maxWidth?: string
+  width?: string
   height?: string
 }>()
 
 </script>
 
 <template>
-  <div class="home-card" :style="{ maxWidth, height }">
+  <div class="home-card" :style="{ width, height }">
     <div class="home-card__title">
       <h3>{{ title }}</h3>
       <slot></slot>

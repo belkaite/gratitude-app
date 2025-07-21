@@ -12,7 +12,7 @@ import FeatureBox from '@/components/FeatureBox.vue'
     </template>
     <template #page-content>
       <div class="about-view">
-        <Card title="About Grati" max-width="50rem" height="65rem">
+        <Card title="About Grati" width="50rem" height="65rem">
           <div class="about-view__about-text">
             Grati is your digital gratitude sidekick. It helps you slow down, look around, and
             remember the good stuff — even on weird days.<br />
@@ -97,6 +97,7 @@ import FeatureBox from '@/components/FeatureBox.vue'
   flex-direction: row;
   gap: 20px;
   overflow-x: scroll;
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
 }
 </style>
