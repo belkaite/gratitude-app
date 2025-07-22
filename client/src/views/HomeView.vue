@@ -24,15 +24,18 @@ onMounted(() => {
     <template #page-content>
       <div class="home-view">
         <div>
-          <Card title="Your progress" width="32rem" height="20rem"
-            ><div class="home-view__labels">Level</div>
+          <Card width="32rem" height="20rem"
+            >
+            <div class="home-view__title">Your progress</div>
+            <div class="home-view__labels">Level</div>
             <div class="home-view__progress-values">{{ userStore.user?.levelName }}</div>
             <div class="home-view__labels">Notes submitted</div>
             <div class="home-view__progress-values">{{ noteStore.noteCount }}</div></Card
           >
         </div>
         <div>
-          <Card title="About Grati" width="32rem" height="20rem">
+          <Card width="32rem" height="20rem">
+            <div class="home-view__title">About Grati</div>
             <div class="home-view__about-text">
               Gratitude is a scientifically proven thing that helps improve well being.
               <br />Instead of writing in a physical journal, decided to create a digital version of
@@ -47,8 +50,12 @@ onMounted(() => {
             </RouterLink>
           </Card>
         </div>
-        <div><Card title="Your recent note" width="32rem" height="20rem"></Card></div>
-        <div><Card title="Unlocked tips" width="32rem" height="20rem"></Card></div>
+        <div><Card width="32rem" height="20rem">
+          <div class="home-view__title">Your recent note</div>
+        </Card></div>
+        <div><Card width="32rem" height="20rem">
+          <div class="home-view__title">Unlocked tips</div>
+        </Card></div>
       </div>
     </template>
   </MainLayout>
@@ -64,6 +71,13 @@ onMounted(() => {
   margin: 4rem;
 }
 
+.home-view__title {
+  color: #55555b;
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin: 0.5rem;
+}
+
 .home-view__labels {
   font-weight: 500;
   color: #94949b;
@@ -74,6 +88,7 @@ onMounted(() => {
 .home-view__progress-values {
   color: #e01c8b;
   font-size: 1.5rem;
+  font-weight: 600;
 }
 
 .home-view__about-text {

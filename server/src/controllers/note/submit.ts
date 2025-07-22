@@ -55,7 +55,7 @@ export default authenticatedProcedure
     const tip = await getTip(repos, notesCount, authUser.id)
 
     return {
-      message: 'Note has been submitted successfully',
+      message: 'Note has been submitted successfully! 🎉',
       note: newNote,
       ...(tip ? { tip } : {}),
     }

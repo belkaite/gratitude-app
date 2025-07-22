@@ -13,6 +13,7 @@ import FeatureBox from '@/components/FeatureBox.vue'
     <template #page-content>
       <div class="about-view">
         <Card title="About Grati" width="50rem" height="65rem">
+          <div class="about-view__title">About Grati</div>
           <div class="about-view__about-text">
             Grati is your digital gratitude sidekick. It helps you slow down, look around, and
             remember the good stuff — even on weird days.<br />
