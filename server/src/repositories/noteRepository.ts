@@ -76,5 +76,15 @@ export function noteRepository(db: Database) {
         .select(['answer1', 'answer2'])
         .executeTakeFirst()
     },
+
+    async getLast(userId: number): Promise<NotePublic | undefined> {
+      return db
+        .selectFrom('note')
+        .where('userId', '=', userId)
+        .orderBy('createdAt', 'desc')
+        .limit(1)
+        .select(noteKeysPublic)
+        .executeTakeFirst()
+    },
   }
 }
