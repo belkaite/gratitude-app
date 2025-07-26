@@ -28,6 +28,16 @@ export const useNoteStore = defineStore('note', () => {
     lastNote.value = await trpc.note.getLast.query()
   }
 
+  async function editNote(noteId: number, firstAnswer: string, secondAnswer: string) {
+    const { message } = await trpc.note.update.mutate({
+      id: noteId,
+      answer1: firstAnswer,
+      answer2: secondAnswer,
+    })
+
+    return message
+  }
+
   return {
     noteCount,
     getNotesCount,
@@ -35,6 +45,7 @@ export const useNoteStore = defineStore('note', () => {
     fetchNotes,
     notes,
     fetchLastNote,
-    lastNote
+    lastNote,
+    editNote
   }
 })

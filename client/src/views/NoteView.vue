@@ -10,24 +10,63 @@ const questionStore = useQuestionStore()
 const noteStore = useNoteStore()
 const firstAnswer = ref('')
 const secondAnswer = ref('')
-const successMessage = ref('')
+const submitSuccessMessage = ref('')
+const editSuccessMessage = ref('')
+const isEdting = ref(false)
+const editedAnswer1 = ref('')
+const editedAnswer2 = ref('')
 
 async function handleSubmit() {
   const message = await noteStore.submitNote(firstAnswer.value, secondAnswer.value)
 
-  successMessage.value = message
+  submitSuccessMessage.value = message
 
   firstAnswer.value = ''
   secondAnswer.value = ''
 
   setTimeout(() => {
-    successMessage.value = ''
+    submitSuccessMessage.value = ''
   }, 6000)
 }
 
 function clearInputs() {
   firstAnswer.value = ''
   secondAnswer.value = ''
+}
+
+async function saveEdit() {
+  const noteId = noteStore.lastNote?.id
+
+  if (!noteId) return
+
+  const message = await noteStore.editNote(noteId, editedAnswer1.value, editedAnswer2.value)
+
+  editSuccessMessage.value = message
+
+  isEdting.value = false
+
+  noteStore.lastNote = {
+    ...noteStore.lastNote!,
+    answer1: editedAnswer1.value,
+    answer2: editedAnswer2.value,
+  }
+
+  setTimeout(() => {
+    editSuccessMessage.value = ''
+  }, 6000)
+}
+
+function startEditing() {
+  if (!noteStore.lastNote) return
+
+  editedAnswer1.value = noteStore.lastNote.answer1
+  editedAnswer2.value = noteStore.lastNote.answer2
+
+  isEdting.value = true
+}
+
+function cancelEdit() {
+  isEdting.value = false
 }
 
 onMounted(() => {
@@ -69,7 +108,9 @@ onMounted(() => {
               </button>
               <input class="note-view__submit-button" type="submit" value="Save" />
             </div>
-            <div v-if="successMessage" class="note-view__success">{{ successMessage }}</div>
+            <div v-if="submitSuccessMessage" class="note-view__success">
+              {{ submitSuccessMessage }}
+            </div>
           </form>
         </Card>
         <Card>
@@ -81,18 +122,51 @@ onMounted(() => {
               </div>
               <div class="note-view__title">{{ noteStore.lastNote?.question1 }}</div>
               <div class="font-handwritten note-view__answer">
-                {{ noteStore.lastNote?.answer1 }}
+                <template v-if="isEdting">
+                  <textarea
+                    v-model="editedAnswer1"
+                    class="note-view__input"
+                    maxlength="500"
+                  ></textarea>
+                </template>
+                <template v-else>
+                  {{ noteStore.lastNote?.answer1 }}
+                </template>
               </div>
             </div>
             <div class="note-view__question-answer">
               <div class="note-view__title">{{ noteStore.lastNote?.question2 }}</div>
               <div class="font-handwritten note-view__answer">
-                {{ noteStore.lastNote?.answer2 }}
+                <template v-if="isEdting">
+                  <textarea
+                    v-model="editedAnswer2"
+                    class="note-view__input"
+                    maxlength="500"
+                  ></textarea>
+                </template>
+                <template v-else>
+                  {{ noteStore.lastNote?.answer2 }}
+                </template>
               </div>
             </div>
             <div class="note-view__buttons">
-              <button type="button" class="note-view__delete-button">Delete</button>
-              <button type="button" class="note-view__edit-button">Edit</button>
+              <template v-if="isEdting">
+                <button type="button" class="note-view__delete-button" @click="cancelEdit">
+                  Cancel
+                </button>
+                <button type="button" class="note-view__edit-button" @click="saveEdit">
+                  Save
+                </button></template
+              >
+              <template v-else>
+                <button type="button" class="note-view__delete-button">Delete</button>
+                <button type="button" class="note-view__edit-button" @click="startEditing">
+                  Edit
+                </button>
+              </template>
+              <div v-if="editSuccessMessage" class="note-view__success">
+                {{ editSuccessMessage }}
+              </div>
             </div>
           </div>
         </Card>
