@@ -5,6 +5,7 @@ import Card from '@/components/Card.vue'
 import { onMounted, ref } from 'vue'
 import { useQuestionStore } from '@/stores/question'
 import { useNoteStore } from '@/stores/note'
+import Modal from '@/components/Modal.vue'
 
 const questionStore = useQuestionStore()
 const noteStore = useNoteStore()
@@ -15,6 +16,7 @@ const editSuccessMessage = ref('')
 const isEdting = ref(false)
 const editedAnswer1 = ref('')
 const editedAnswer2 = ref('')
+const isDeleteModalOpen = ref(false)
 
 async function handleSubmit() {
   const message = await noteStore.submitNote(firstAnswer.value, secondAnswer.value)
@@ -56,6 +58,17 @@ async function saveEdit() {
   }, 6000)
 }
 
+async function deleteNote() {
+  const noteId = noteStore.lastNote?.id
+
+  if (!noteId) return
+
+  const message = await noteStore.deleteNote(noteId)
+  noteStore.fetchLastNote()
+  isDeleteModalOpen.value = false
+  return message
+}
+
 function startEditing() {
   if (!noteStore.lastNote) return
 
@@ -67,6 +80,14 @@ function startEditing() {
 
 function cancelEdit() {
   isEdting.value = false
+}
+
+function openDeleteModal() {
+  isDeleteModalOpen.value = true
+}
+
+function closeModal() {
+  isDeleteModalOpen.value = false
 }
 
 onMounted(() => {
@@ -159,7 +180,9 @@ onMounted(() => {
                 </button></template
               >
               <template v-else>
-                <button type="button" class="note-view__delete-button">Delete</button>
+                <button type="button" class="note-view__delete-button" @click="openDeleteModal">
+                  Delete
+                </button>
                 <button type="button" class="note-view__edit-button" @click="startEditing">
                   Edit
                 </button>
@@ -167,6 +190,21 @@ onMounted(() => {
               <div v-if="editSuccessMessage" class="note-view__success">
                 {{ editSuccessMessage }}
               </div>
+              <template v-if="isDeleteModalOpen">
+                <Modal @close="closeModal">
+                  <div class="note-view__title">
+                    Are you sure that you would like to delete the latest note?
+                  </div>
+                  <div class="note-view__buttons">
+                    <button type="button" class="note-view__delete-button" @click="closeModal">
+                      No
+                    </button>
+                    <button type="button" class="note-view__edit-button" @click="deleteNote">
+                      Yes
+                    </button>
+                  </div>
+                </Modal>
+              </template>
             </div>
           </div>
         </Card>

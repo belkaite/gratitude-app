@@ -38,6 +38,12 @@ export const useNoteStore = defineStore('note', () => {
     return message
   }
 
+  async function deleteNote(noteId: number) {
+    const { message } = await trpc.note.delete.mutate({ id: noteId })
+
+    return message
+  }
+
   return {
     noteCount,
     getNotesCount,
@@ -46,6 +52,7 @@ export const useNoteStore = defineStore('note', () => {
     notes,
     fetchLastNote,
     lastNote,
-    editNote
+    editNote,
+    deleteNote,
   }
 })
