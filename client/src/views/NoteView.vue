@@ -6,6 +6,7 @@ import { onMounted, ref } from 'vue'
 import { useQuestionStore } from '@/stores/question'
 import { useNoteStore } from '@/stores/note'
 import Modal from '@/components/Modal.vue'
+import NoteBlock from '@/components/NoteBlock.vue'
 
 const questionStore = useQuestionStore()
 const noteStore = useNoteStore()
@@ -17,6 +18,7 @@ const isEdting = ref(false)
 const editedAnswer1 = ref('')
 const editedAnswer2 = ref('')
 const isDeleteModalOpen = ref(false)
+const isViewMoreModalOpen = ref(false)
 
 async function handleSubmit() {
   const message = await noteStore.submitNote(firstAnswer.value, secondAnswer.value)
@@ -88,6 +90,12 @@ function openDeleteModal() {
 
 function closeModal() {
   isDeleteModalOpen.value = false
+  isViewMoreModalOpen.value = false
+}
+
+async function openViewMoreModal() {
+  await noteStore.fetchNotes()
+  isViewMoreModalOpen.value = true
 }
 
 onMounted(() => {
@@ -135,7 +143,23 @@ onMounted(() => {
           </form>
         </Card>
         <Card>
-          <div class="note-view__title">Your past notes</div>
+          <div class="note-view__last-note-header">
+            <div class="note-view__title">Your past notes</div>
+            <button type="button" class="note-view__view-more-button" @click="openViewMoreModal">
+              View more
+            </button>
+            <template v-if="isViewMoreModalOpen">
+              <Modal @close="closeModal">
+                <div class="note-view__view-more-notes">
+                  <NoteBlock
+                    v-for="note in noteStore.notes"
+                    :key="note.id"
+                    :note="note"
+                  ></NoteBlock>
+                </div>
+              </Modal>
+            </template>
+          </div>
           <div class="note-view__last-note-block">
             <div class="note-view__question-answer">
               <div class="note-view__date">
@@ -315,5 +339,37 @@ onMounted(() => {
   padding-block: 0.5rem;
   padding-inline: 1rem;
   color: #e01c8b;
+}
+
+.note-view__view-more-button {
+  background-color: #f5f5f5;
+  color: #55555b;
+  font-weight: 500;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+.note-view__last-note-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.note-view__view-more-notes {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  padding: 10px;
+  max-width: 80vw;
+}
+
+.note-view__view-more-notes > * {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
 }
 </style>
