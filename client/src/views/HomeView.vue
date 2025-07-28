@@ -6,12 +6,14 @@ import { useUserStore } from '@/stores/user'
 import { useNoteStore } from '@/stores/note'
 import { onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import NoteBlock from '@/components/NoteBlock.vue'
 
 const userStore = useUserStore()
 const noteStore = useNoteStore()
 
 onMounted(() => {
   noteStore.getNotesCount()
+  noteStore.fetchLastNote()
 })
 </script>
 
@@ -24,8 +26,7 @@ onMounted(() => {
     <template #page-content>
       <div class="home-view">
         <div>
-          <Card width="32rem" height="20rem"
-            >
+          <Card width="32rem" height="20rem">
             <div class="home-view__title">Your progress</div>
             <div class="home-view__labels">Level</div>
             <div class="home-view__progress-values">{{ userStore.user?.levelName }}</div>
@@ -50,12 +51,29 @@ onMounted(() => {
             </RouterLink>
           </Card>
         </div>
-        <div><Card width="32rem" height="20rem">
-          <div class="home-view__title">Your recent note</div>
-        </Card></div>
-        <div><Card width="32rem" height="20rem">
-          <div class="home-view__title">Unlocked tips</div>
-        </Card></div>
+        <div>
+          <Card width="32rem" height="20rem">
+            <div class="home-view__recent-note-header">
+              <div class="home-view__title">Your recent note</div>
+              <RouterLink to="/notes">
+                <button type="button" class="home-view__add-button">
+                  Add new
+                  <img src="../assets/icons/arrow-white-icon.svg" /></button
+              ></RouterLink>
+            </div>
+            <div v-if="noteStore.lastNote">
+              <NoteBlock :note="noteStore.lastNote"> </NoteBlock>
+            </div>
+            <div v-else>
+              <p>No note yet.</p>
+            </div>
+          </Card>
+        </div>
+        <div>
+          <Card width="32rem" height="20rem">
+            <div class="home-view__title">Unlocked tips</div>
+          </Card>
+        </div>
       </div>
     </template>
   </MainLayout>
@@ -105,5 +123,28 @@ onMounted(() => {
   color: #e01c8b;
   font-size: 1rem;
   justify-content: end;
+}
+
+.home-view__add-button {
+  background-color: #2419ee;
+  color: white;
+  padding-inline: 2rem;
+  padding-block: 0.5rem;
+  border-radius: 15px;
+  margin-block: 1rem;
+  height: 3rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.home-view__recent-note-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
 }
 </style>

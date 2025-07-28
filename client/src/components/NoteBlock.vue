@@ -1,9 +1,12 @@
 <script lang="ts" setup>
 import type { NotePublic } from '@server/shared/types'
 
+
 defineProps<{
   note: NotePublic
 }>()
+
+
 </script>
 
 <template>
@@ -17,7 +20,7 @@ defineProps<{
 
     <div class="note-block__question-answer">
       <div class="note-block__title">{{ note.question2 }}</div>
-      <div class="font-handwritten note-block__answer">{{ note.question2 }}</div>
+      <div class="font-handwritten note-block__answer">{{ note.answer2 }}</div>
     </div>
   </div>
 </template>

@@ -149,7 +149,8 @@ onMounted(() => {
               View more
             </button>
             <template v-if="isViewMoreModalOpen">
-              <Modal @close="closeModal">
+              <Modal height="500px" @close="closeModal">
+                <div class="note-view__title">Your past notes</div>
                 <div class="note-view__view-more-notes">
                   <NoteBlock
                     v-for="note in noteStore.notes"
@@ -215,7 +216,7 @@ onMounted(() => {
                 {{ editSuccessMessage }}
               </div>
               <template v-if="isDeleteModalOpen">
-                <Modal @close="closeModal">
+                <Modal height="200px" @close="closeModal">
                   <div class="note-view__title">
                     Are you sure that you would like to delete the latest note?
                   </div>
@@ -365,7 +366,8 @@ onMounted(() => {
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
   padding: 10px;
-  max-width: 80vw;
+  max-width: 50vw;
+  margin: 20px;
 }
 
 .note-view__view-more-notes > * {

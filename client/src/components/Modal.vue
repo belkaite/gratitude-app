@@ -1,10 +1,12 @@
 <script setup lang="ts">
+defineProps<{ height: string }>()
+
 defineEmits(['close'])
 </script>
 
 <template>
   <div class="modal">
-    <div class="modal__inner">
+    <div class="modal__inner" :style="{ height }">
       <div class="modal__close-button">
         <img src="../assets/icons/close-icon.svg" @click="$emit('close')" />
       </div>
@@ -38,7 +40,7 @@ defineEmits(['close'])
   position: relative;
   gap: 2rem;
   width: 50%;
-  height: 20%;
+
 }
 
 .modal__close-button {
