@@ -2,7 +2,6 @@
 import { defineProps } from 'vue'
 
 defineProps<{
-  title: string
   width?: string
   height?: string
 }>()
@@ -11,8 +10,7 @@ defineProps<{
 
 <template>
   <div class="home-card" :style="{ width, height }">
-    <div class="home-card__title">
-      <h3>{{ title }}</h3>
+    <div>
       <slot></slot>
     </div>
   </div>
@@ -26,11 +24,5 @@ defineProps<{
   padding: 2rem;
 }
 
-.home-card__title {
-  color: #55555b;
-  font-weight: 600;
-  font-size: 1.25rem;
-  padding: 1rem;
-  margin: 0.5rem;
-}
+
 </style>

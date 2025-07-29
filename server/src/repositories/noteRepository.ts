@@ -28,6 +28,7 @@ export function noteRepository(db: Database) {
         .selectFrom('note')
         .where('userId', '=', userId)
         .select(noteKeysPublic)
+        .orderBy('createdAt', 'desc')
         .execute()
     },
 
@@ -74,6 +75,16 @@ export function noteRepository(db: Database) {
         .where('userId', '=', userId)
         .orderBy('createdAt', 'desc')
         .select(['answer1', 'answer2'])
+        .executeTakeFirst()
+    },
+
+    async getLast(userId: number): Promise<NotePublic | undefined> {
+      return db
+        .selectFrom('note')
+        .where('userId', '=', userId)
+        .orderBy('createdAt', 'desc')
+        .limit(1)
+        .select(noteKeysPublic)
         .executeTakeFirst()
     },
   }
