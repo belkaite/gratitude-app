@@ -7,6 +7,7 @@ import { useQuestionStore } from '@/stores/question'
 import { useNoteStore } from '@/stores/note'
 import Modal from '@/components/Modal.vue'
 import NoteBlock from '@/components/NoteBlock.vue'
+import { useAIStore } from '../stores/ai'
 
 const questionStore = useQuestionStore()
 const noteStore = useNoteStore()
@@ -19,6 +20,7 @@ const editedAnswer1 = ref('')
 const editedAnswer2 = ref('')
 const isDeleteModalOpen = ref(false)
 const isViewMoreModalOpen = ref(false)
+const aiStore = useAIStore()
 
 async function handleSubmit() {
   const message = await noteStore.submitNote(firstAnswer.value, secondAnswer.value)
@@ -96,6 +98,10 @@ function closeModal() {
 async function openViewMoreModal() {
   await noteStore.fetchNotes()
   isViewMoreModalOpen.value = true
+}
+
+async function getAIreflection() {
+  await aiStore.getAIresponse()
 }
 
 onMounted(() => {
@@ -233,7 +239,25 @@ onMounted(() => {
             </div>
           </div>
         </Card>
-        <card> </card>
+        <Card>
+          <div class="note-view__title">GratiBot has thoughts</div>
+          <div class="note-view__gratibot-block">
+            <div class="note-view__gratibot-left">
+              <div class="note-view__about-text">
+                Curious? Click me to see my reflection on your last note.
+              </div>
+              <button button="type" @click="getAIreflection">
+                <div class="note-view__circle-background">
+                  <img src="../assets/images/fish-image.svg" />
+                </div>
+              </button>
+            </div>
+
+            <div class="note-view__last-note-block note-view__gratibot-text">
+              {{ aiStore.aiResponse }}
+            </div>
+          </div>
+        </Card>
       </div>
     </template>
   </MainLayout>
@@ -373,5 +397,44 @@ onMounted(() => {
 .note-view__view-more-notes > * {
   flex: 0 0 auto;
   scroll-snap-align: start;
+}
+
+.note-view__about-text {
+  color: #94949b;
+  font-size: 1rem;
+}
+
+.note-view__circle-background {
+  width: 160px;
+  height: 160px;
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+  cursor: pointer;
+}
+
+.note-view__circle-background img {
+  width: 80px;
+}
+
+.note-view__gratibot-block {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+  align-self: start;
+}
+
+.note-view__gratibot-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.note-view__gratibot-text {
+  color: #55555b;
 }
 </style>

@@ -28,6 +28,7 @@ export function noteRepository(db: Database) {
         .selectFrom('note')
         .where('userId', '=', userId)
         .select(noteKeysPublic)
+        .orderBy('createdAt', 'desc')
         .execute()
     },
 
