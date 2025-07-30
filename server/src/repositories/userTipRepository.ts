@@ -28,5 +28,12 @@ export function userTipRepository(db: Database) {
         .select(userTipKeysAll)
         .executeTakeFirst()
     },
+
+    async getLast(userId: number) {
+      return db.selectFrom('userTip').where('userId', '=', userId)
+      .innerJoin('tip', 'tip.id', 'userTip.tipId')
+      .select(['tip.id as id', 'tip.content', 'userTip.shownAt']).orderBy('userTip.shownAt', 'desc')
+      .executeTakeFirst()
+    }
   }
 }

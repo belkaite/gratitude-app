@@ -12,4 +12,11 @@ defineProps<{
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.tip-block {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+</style>

@@ -2,11 +2,43 @@
 import { watch, ref, defineProps } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
+import Modal from '@/components/Modal.vue'
+
+const oldPassword = ref('')
+const newPassword = ref('')
+const successMessage = ref('')
+const errorMessage = ref('')
 
 const router = useRouter()
 
 const store = useUserStore()
 const showLogout = ref(false)
+const isPassChangeModalOpen = ref(false)
+
+function openPassChangeModal() {
+  isPassChangeModalOpen.value = true
+}
+
+function closeModal() {
+  isPassChangeModalOpen.value = false
+}
+
+async function submitPasswordChange() {
+  try {
+    const message = await store.changePassword({
+      currentPassword: oldPassword.value,
+      newPassword: newPassword.value,
+    })
+    successMessage.value = message
+    setTimeout(() => {
+      successMessage.value = ''
+    }, 6000)
+    oldPassword.value = ''
+    newPassword.value = ''
+  } catch (error: any) {
+    errorMessage.value = error?.message ?? 'Something went wrong.'
+  }
+}
 
 defineProps<{ pageTitle: string }>()
 
@@ -49,9 +81,39 @@ function logoutUser() {
               <img src="../assets/icons/arrow_down.svg" />
             </button>
             <div v-if="showLogout" class="main-layout__right-logout-box">
-              <button type="button" class="main-layout__right-logout-box-title" @click="logoutUser">
-                Log out
-              </button>
+              <div>
+                <button type="button" @click="openPassChangeModal">Change password</button>
+                <button
+                  type="button"
+                  class="main-layout__right-logout-box-title"
+                  @click="logoutUser"
+                >
+                  Log out
+                </button>
+                <Modal height="500px" v-if="isPassChangeModalOpen" @close="closeModal">
+                  <label>
+                    Current password:
+                    <input v-model="oldPassword" />
+                  </label>
+                  <label>
+                    New password:
+                    <input v-model="newPassword" />
+                  </label>
+                  <button
+                    class="main_layout__submit-button"
+                    type="button"
+                    @click="submitPasswordChange"
+                  >
+                    Submit
+                  </button>
+                  <div v-if="successMessage" class="main-layout__success">
+                    {{ successMessage }}
+                  </div>
+                  <div v-else-if="errorMessage" class="main-layout__error">
+                    {{ errorMessage }}
+                  </div>
+                </Modal>
+              </div>
             </div>
           </div>
         </div>
@@ -99,6 +161,7 @@ function logoutUser() {
   flex-direction: row;
   align-items: center;
   gap: 2rem;
+  box-shadow: 0.25px 0.25px 20px 0.5px rgba(0, 0, 0, 0.1);
 
   background-color: #ffffff;
   color: #55555b;
@@ -122,6 +185,7 @@ function logoutUser() {
   border-radius: 20px;
   color: #e01c8b;
   font-weight: 600;
+  box-shadow: 0.25px 0.25px 20px 0.5px rgba(0, 0, 0, 0.1);
 }
 
 .main-layout__right-logout-box-title {
@@ -132,5 +196,39 @@ function logoutUser() {
 .main-layout__right-clickable-part {
   display: flex;
   flex-direction: column;
+}
+
+.main-layout__success {
+  border: 2px solid;
+  border-radius: 5px;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  background-color: #e6fffc;
+  color: #025e52;
+  margin-top: 2rem;
+}
+
+.main-layout__error {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  border: 2px solid;
+  border-radius: 5px;
+  padding-block: 0.5rem;
+  padding-inline: 1rem;
+  margin-top: 2rem;
+  background-color: #ffe6e6;
+  color: #a00404;
+}
+
+.main_layout__submit-button {
+  background-color: #2419ee;
+  color: white;
+  padding-inline: 2rem;
+  padding-block: 0.5rem;
+  border-radius: 15px;
+  margin-block: 1rem;
+  height: 2.5rem;
+  cursor: pointer;
 }
 </style>

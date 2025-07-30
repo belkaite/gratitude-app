@@ -18,9 +18,32 @@ onMounted(() => {
       <Sidebar></Sidebar>
     </template>
     <template #page-content>
-      <TipBlock v-for="tip in tipStore.tips" :key="tip.id" :tip="tip"></TipBlock>
+      <div class="tip-view__layout">
+        <TipBlock v-for="tip in tipStore.tips" :key="tip.id" :tip="tip"></TipBlock>
+      </div>
     </template>
   </MainLayout>
 </template>
 
-<style scoped></style>
+<style scoped>
+.tip-view__layout {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  padding: 10px;
+  max-width: 70vw;
+  max-height: 50vw;
+  margin: 20px;
+}
+
+.tip-view__layout > * {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: 500px;
+}
+
+
+</style>

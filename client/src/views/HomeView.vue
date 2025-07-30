@@ -7,13 +7,17 @@ import { useNoteStore } from '@/stores/note'
 import { onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import NoteBlock from '@/components/NoteBlock.vue'
+import { useTipStore } from '@/stores/tip'
+
 
 const userStore = useUserStore()
 const noteStore = useNoteStore()
+const tipStore = useTipStore()
 
 onMounted(() => {
   noteStore.getNotesCount()
   noteStore.fetchLastNote()
+  tipStore.getLastTip()
 })
 </script>
 
@@ -72,6 +76,7 @@ onMounted(() => {
         <div>
           <Card width="32rem" height="20rem">
             <div class="home-view__title">Unlocked tips</div>
+            <div> {{ tipStore.lastTip?.content }}</div>
           </Card>
         </div>
       </div>
