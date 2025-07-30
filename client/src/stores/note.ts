@@ -4,6 +4,7 @@ import { trpc } from '@/trpc'
 import type { NotePublic } from '@server/shared/types'
 
 export const useNoteStore = defineStore('note', () => {
+  const tip = ref()
   const noteCount = ref()
   const notes = ref<NotePublic[]>([])
   const lastNote = ref<NotePublic>()
@@ -13,11 +14,16 @@ export const useNoteStore = defineStore('note', () => {
   }
 
   async function submitNote(firstAnswer: string, secondAnswer: string) {
-    const { message } = await trpc.note.submit.mutate({
+    const response = await trpc.note.submit.mutate({
       answer1: firstAnswer,
       answer2: secondAnswer,
     })
-    return message
+
+    if (response.tip) {
+      tip.value = response.tip
+    }
+
+    return response.message
   }
 
   async function fetchNotes() {
@@ -54,5 +60,6 @@ export const useNoteStore = defineStore('note', () => {
     lastNote,
     editNote,
     deleteNote,
+    tip,
   }
 })
