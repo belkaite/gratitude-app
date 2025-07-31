@@ -9,7 +9,6 @@ import { RouterLink } from 'vue-router'
 import NoteBlock from '@/components/NoteBlock.vue'
 import { useTipStore } from '@/stores/tip'
 
-
 const userStore = useUserStore()
 const noteStore = useNoteStore()
 const tipStore = useTipStore()
@@ -30,7 +29,7 @@ onMounted(() => {
     <template #page-content>
       <div class="home-view">
         <div>
-          <Card width="32rem" height="20rem">
+          <Card width="35rem" height="22rem">
             <div class="home-view__title">Your progress</div>
             <div class="home-view__labels">Level</div>
             <div class="home-view__progress-values">{{ userStore.user?.levelName }}</div>
@@ -39,7 +38,7 @@ onMounted(() => {
           >
         </div>
         <div>
-          <Card width="32rem" height="20rem">
+          <Card width="35rem" height="22rem">
             <div class="home-view__title">About Grati</div>
             <div class="home-view__about-text">
               Gratitude is a scientifically proven thing that helps improve well being.
@@ -56,7 +55,7 @@ onMounted(() => {
           </Card>
         </div>
         <div>
-          <Card width="32rem" height="20rem">
+          <Card width="35rem" height="22rem">
             <div class="home-view__recent-note-header">
               <div class="home-view__title">Your recent note</div>
               <RouterLink to="/notes">
@@ -74,9 +73,14 @@ onMounted(() => {
           </Card>
         </div>
         <div>
-          <Card width="32rem" height="20rem">
+          <Card width="35rem" height="22rem">
             <div class="home-view__title">Unlocked tips</div>
-            <div> {{ tipStore.lastTip?.content }}</div>
+            <div class="home-view__tips-text">{{ tipStore.lastTip?.content }}</div>
+            <RouterLink to="/tips">
+              <div class="home-view__about-buttom">
+                <button>Read full</button> <img src="../assets/icons/arrow-right.svg" />
+              </div>
+            </RouterLink>
           </Card>
         </div>
       </div>
@@ -92,6 +96,7 @@ onMounted(() => {
   column-gap: 40px;
   row-gap: 40px;
   margin: 4rem;
+  max-width: 550px;
 }
 
 .home-view__title {
@@ -122,16 +127,33 @@ onMounted(() => {
   margin-block: 1rem;
 }
 
+.home-view__tips-text {
+  color: #94949b;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: justify;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 7;
+  line-clamp: 7;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .home-view__about-buttom {
   display: flex;
   flex-direction: row;
   color: #e01c8b;
   font-size: 1rem;
+  font-weight: 600;
   justify-content: end;
+  cursor: pointer;
+  margin: 10px;
 }
 
 .home-view__add-button {
   background-color: #2419ee;
+  font-weight: 500;
   color: white;
   padding-inline: 2rem;
   padding-block: 0.5rem;
@@ -151,5 +173,19 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
+}
+
+@media (width <= 600px) {
+  .home-view {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (width <= 1200px) {
+  .home-view {
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>

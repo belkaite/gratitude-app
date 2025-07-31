@@ -70,19 +70,27 @@ function logoutUser() {
       <slot name="navigation"></slot>
     </div>
     <div class="main-layout__right">
-      <div class="main-layout__right-header">
-        <div class="main-layout__right-title">{{ pageTitle }} {{ store.user?.firstName }}</div>
-        <div class="main-layout__right-user-profile">
-          <img src="../assets/icons/user-profile-icon.svg" />
+      <div class="main-layout__right-display">
+        <div class="main-layout__right-header">
+          <div class="main-layout__right-title">{{ pageTitle }} {{ store.user?.firstName }}</div>
+          <div class="main-layout__right-user-profile">
+            <img src="../assets/icons/user-profile-icon.svg" />
 
-          <div>{{ store.user?.firstName }} {{ store.user?.lastName }}</div>
-          <div class="main-layout__right-clickable-part">
-            <button type="button" class="main-layout__right-button" @click="clickOnArrow">
-              <img src="../assets/icons/arrow_down.svg" />
-            </button>
-            <div v-if="showLogout" class="main-layout__right-logout-box">
-              <div>
-                <button type="button" @click="openPassChangeModal">Change password</button>
+            <div class="main-layout__user-name">
+              {{ store.user?.firstName }} {{ store.user?.lastName }}
+            </div>
+            <div class="main-layout__right-clickable-part">
+              <button type="button" class="main-layout__right-button" @click="clickOnArrow">
+                <img src="../assets/icons/arrow_down.svg" />
+              </button>
+              <div v-if="showLogout" class="main-layout__right-logout-box">
+                <button
+                  type="button"
+                  class="main-layout__right-logout-box-title"
+                  @click="openPassChangeModal"
+                >
+                  Change password
+                </button>
                 <button
                   type="button"
                   class="main-layout__right-logout-box-title"
@@ -117,9 +125,9 @@ function logoutUser() {
             </div>
           </div>
         </div>
+        <slot name="page-content"></slot>
+        <RouterView></RouterView>
       </div>
-      <slot name="page-content"></slot>
-      <RouterView></RouterView>
     </div>
   </div>
   <div v-if="!store.isLoggedin">
@@ -131,6 +139,7 @@ function logoutUser() {
 .main-layout {
   display: flex;
   flex-direction: row;
+  height: 100vh;
 }
 .main-layout__left {
   width: 25rem;
@@ -138,7 +147,11 @@ function logoutUser() {
 
 .main-layout__right {
   background-color: #f5f5f5;
-  width: 75%;
+  width: 100%;
+}
+
+.main-layout__right-display {
+  max-width: 1300px;
 }
 
 .main-layout__right-header {
@@ -176,6 +189,9 @@ function logoutUser() {
 }
 
 .main-layout__right-logout-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   padding: 1.5rem 4rem;
   background-color: #ffffff;
   margin: 0.5rem;
@@ -191,6 +207,7 @@ function logoutUser() {
 .main-layout__right-logout-box-title {
   cursor: pointer;
   padding: 1rem;
+  text-align: left;
 }
 
 .main-layout__right-clickable-part {
@@ -230,5 +247,40 @@ function logoutUser() {
   margin-block: 1rem;
   height: 2.5rem;
   cursor: pointer;
+}
+
+@media (width <= 600px) {
+  .main-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .main-layout__left,
+  .main-layout__right {
+    width: 100%;
+  }
+
+  .main-layout__right {
+    min-height: 100vh;
+  }
+
+  .main-layout__right-header {
+    display: flex;
+    flex-direction: row;
+    gap: 1px;
+    width: 100%;
+  }
+
+  .main-layout__right-title {
+    font-size: 16px;
+  }
+
+  .main-layout__right-user-profile {
+    font-size: 12px;
+  }
+
+  .main-layout__user-name {
+    display: none;
+  }
 }
 </style>

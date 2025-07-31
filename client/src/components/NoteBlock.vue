@@ -1,12 +1,9 @@
 <script lang="ts" setup>
 import type { NotePublic } from '@server/shared/types'
 
-
 defineProps<{
   note: NotePublic
 }>()
-
-
 </script>
 
 <template>
@@ -39,5 +36,11 @@ defineProps<{
 
 .note-block__question-answer {
   margin: 10px;
+  color: #55555b;
+}
+
+.note-block__title {
+  color: #55555b;
+  font-weight: 600;
 }
 </style>

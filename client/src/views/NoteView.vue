@@ -287,6 +287,7 @@ onMounted(() => {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+  margin: 4rem;
 }
 .note-view__item1 {
   grid-row: 1 / 4;

@@ -74,4 +74,19 @@ const questionMarkBlue = new URL('../assets/icons/question_mark_icon_blue.svg', 
   padding: 1rem;
   border-radius: 10px;
 }
+
+@media (width <= 600px) {
+  .sidebar-logo {
+    width: 150px;
+  }
+
+  .sidebar-navigation {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+  }
+  .sidebar-link {
+    font-size: 12px;
+  }
+}
 </style>

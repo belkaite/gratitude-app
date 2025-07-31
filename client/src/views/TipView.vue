@@ -37,6 +37,7 @@ onMounted(() => {
   max-width: 70vw;
   max-height: 50vw;
   margin: 20px;
+  margin: 4rem;
 }
 
 .tip-view__layout > * {
