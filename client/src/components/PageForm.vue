@@ -112,7 +112,7 @@ function goToLogIn() {
 }
 
 .login__heading {
-  font-size: 2.5rem;
+  font-size: 36px;
   color: #e01c8b;
 }
 
@@ -190,5 +190,17 @@ function goToLogIn() {
   background-color: #e6fffc;
   color: #025e52;
   margin-top: 2rem;
+}
+
+@media (width <= 600px) {
+  .login__heading {
+    font-size: 18px;
+  }
+
+  .login__form,
+  .login__description,
+  .login__signup {
+    font-size: 12px;
+  }
 }
 </style>

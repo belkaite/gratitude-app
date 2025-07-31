@@ -56,4 +56,37 @@
   gap: 3rem;
   padding-bottom: 15rem;
 }
+
+@media (width <= 600px) {
+  .auth-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .auth-layout__left,
+  .auth-layout__right {
+    width: 100%;
+  }
+
+  .auth-layout__description {
+    font-size: 16px;
+  }
+
+  .auth-layout__logo {
+    width: 200px;
+  }
+
+  .auth-layout__intro {
+    margin: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 2rem;
+  }
+
+  .auth-layout__description {
+    text-align: center;
+  }
+}
 </style>

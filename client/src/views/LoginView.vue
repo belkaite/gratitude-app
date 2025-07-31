@@ -25,8 +25,10 @@ async function submitLogin(payload: { email: string; password: string }) {
   <AuthPageLayout>
     <template #left>
       <p>
-        Welcome back! Log in to continue your journey toward a more grateful life. Even the smallest
-        moments are worth noticing - and your digital journal is here to help you capture them.
+        Welcome back!
+        <br />
+        Let’s pick up where you left off — noticing the quiet beauty in everyday life. Your
+        gratitude journal is ready when you are.
       </p>
     </template>
     <PageForm
@@ -41,3 +43,6 @@ async function submitLogin(payload: { email: string; password: string }) {
     />
   </AuthPageLayout>
 </template>
+
+
+
