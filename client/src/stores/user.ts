@@ -32,6 +32,11 @@ export const useUserStore = defineStore('user', () => {
     clearStoredAccessToken(localStorage)
   }
 
+  async function changePassword(payload: { currentPassword: string; newPassword: string }) {
+    const { message } = await trpc.user.changePassword.mutate(payload)
+    return message
+  }
+
   const isLoggedin = computed(() => authToken.value)
 
   return {
@@ -42,5 +47,6 @@ export const useUserStore = defineStore('user', () => {
     user,
     logout,
     isLoggedin,
+    changePassword
   }
 })

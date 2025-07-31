@@ -29,9 +29,14 @@ export async function getTip(
 
   const tip = await repos.tipRepository.findByOrder(notesCount / 5)
 
-  if (tip) {
+  if (!tip) return null
+
+  const alreadyShown = await repos.userTipRepository.findById(userId, tip.id)
+
+  if (!alreadyShown) {
     await repos.userTipRepository.saveShownTip(userId, tip.id)
+    return tip
   }
 
-  return tip
+  return null
 }

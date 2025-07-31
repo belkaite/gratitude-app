@@ -20,6 +20,7 @@ const editedAnswer1 = ref('')
 const editedAnswer2 = ref('')
 const isDeleteModalOpen = ref(false)
 const isViewMoreModalOpen = ref(false)
+const isTipModalOpen = ref(false)
 const aiStore = useAIStore()
 
 async function handleSubmit() {
@@ -29,6 +30,10 @@ async function handleSubmit() {
 
   firstAnswer.value = ''
   secondAnswer.value = ''
+
+  if (noteStore.tip) {
+    isTipModalOpen.value = true
+  }
 
   setTimeout(() => {
     submitSuccessMessage.value = ''
@@ -93,6 +98,7 @@ function openDeleteModal() {
 function closeModal() {
   isDeleteModalOpen.value = false
   isViewMoreModalOpen.value = false
+  isTipModalOpen.value = false
 }
 
 async function openViewMoreModal() {
@@ -259,6 +265,19 @@ onMounted(() => {
           </div>
         </Card>
       </div>
+      <template v-if="isTipModalOpen">
+        <Modal height="700px" @close="closeModal">
+          <div class="note-view__tip-layout">
+            <div class="note-view__tip-title">GratiFact break...💡</div>
+            <div class="note-view__tip">{{ noteStore.tip.content }}</div>
+            <RouterLink to="/tips">
+              <button type="button" class="note-view__view-more-button">
+                Read all tips
+              </button></RouterLink
+            >
+          </div>
+        </Modal>
+      </template>
     </template>
   </MainLayout>
 </template>
@@ -372,6 +391,7 @@ onMounted(() => {
   font-weight: 500;
   padding: 10px;
   border-radius: 15px;
+  cursor: pointer;
 }
 
 .note-view__last-note-header {
@@ -436,5 +456,24 @@ onMounted(() => {
 
 .note-view__gratibot-text {
   color: #55555b;
+}
+
+.note-view__tip-title {
+  color: #2419ee;
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.note-view__tip {
+  color: #55555b;
+  padding: 30px;
+  border-radius: 25px;
+}
+
+.note-view__tip-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>

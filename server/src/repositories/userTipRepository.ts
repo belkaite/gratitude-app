@@ -4,7 +4,11 @@ import { userTipKeysAll } from '@server/entities/userTip'
 export function userTipRepository(db: Database) {
   return {
     async saveShownTip(userId: number, tipId: number) {
-      return db.insertInto('userTip').values({ userId, tipId }).returning(userTipKeysAll).execute()
+      return db
+        .insertInto('userTip')
+        .values({ userId, tipId })
+        .returning(userTipKeysAll)
+        .execute()
     },
 
     async getShown(userId: number) {
@@ -12,8 +16,24 @@ export function userTipRepository(db: Database) {
         .selectFrom('userTip')
         .where('userId', '=', userId)
         .innerJoin('tip', 'tip.id', 'userTip.tipId')
-        .select(['content', 'shownAt'])
+        .select(['tip.id as id', 'tip.content', 'userTip.shownAt'])
         .execute()
     },
+
+    async findById(userId: number, tipId: number) {
+      return db
+        .selectFrom('userTip')
+        .where('userId', '=', userId)
+        .where('tipId', '=', tipId)
+        .select(userTipKeysAll)
+        .executeTakeFirst()
+    },
+
+    async getLast(userId: number) {
+      return db.selectFrom('userTip').where('userId', '=', userId)
+      .innerJoin('tip', 'tip.id', 'userTip.tipId')
+      .select(['tip.id as id', 'tip.content', 'userTip.shownAt']).orderBy('userTip.shownAt', 'desc')
+      .executeTakeFirst()
+    }
   }
 }
