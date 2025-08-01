@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import { DEFAULT_SERVER_ERROR } from '../consts'
 import AuthPageLayout from '@/layouts/AuthPageLayout.vue'
 import { useUserStore } from '@/stores/user'
+import { getZodError } from '@/utils'
 
 const successMessage = ref(false)
 const errorMessage = ref('')
@@ -26,9 +27,8 @@ async function submitSignUp(payload: {
   } catch (error: any) {
     if (error.data?.zodError) {
       const fieldErrors = error.data.zodError.fieldErrors as Record<string, string[]>
-      const firstFieldKey = Object.keys(fieldErrors)[0]
-      const firstErrorMsg = fieldErrors[firstFieldKey]?.[0]
-      errorMessage.value = firstErrorMsg || 'Invalid input.'
+
+      errorMessage.value = getZodError(fieldErrors)
     } else {
       errorMessage.value = error instanceof Error ? error.message : DEFAULT_SERVER_ERROR
     }
