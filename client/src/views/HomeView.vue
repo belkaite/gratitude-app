@@ -179,6 +179,14 @@ onMounted(() => {
   .home-view {
     display: flex;
     flex-direction: column;
+    font-size: 14px;
+  }
+  .home-view__title,
+  .home-view__labels,
+  .home-view__progress-values,
+  .home-view__about-text,
+  .home-view__about-buttom, .home-view__tips-text {
+    font-size: 14px;
   }
 }
 

@@ -101,4 +101,10 @@ import FeatureBox from '@/components/FeatureBox.vue'
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
 }
+
+@media (width <= 600px) {
+  .about-view__title,.about-view__about-text, .about-view__box-layout {
+    font-size: 12px;
+  }
+}
 </style>
