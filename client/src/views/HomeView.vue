@@ -21,7 +21,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <MainLayout page-title="Hello, ">
+  <MainLayout page-title="Gratitude time, ">
     <template #navigation>
       <Sidebar></Sidebar>
     </template>
