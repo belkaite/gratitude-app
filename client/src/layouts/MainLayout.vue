@@ -261,7 +261,7 @@ function logoutUser() {
   }
 
   .main-layout__right {
-    min-height: 100vh;
+    height: 100vh;
   }
 
   .main-layout__right-header {

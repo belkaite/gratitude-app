@@ -43,4 +43,6 @@ defineProps<{
   color: #55555b;
   font-weight: 600;
 }
+
+
 </style>

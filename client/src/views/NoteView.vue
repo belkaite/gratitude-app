@@ -123,7 +123,7 @@ onMounted(() => {
     </template>
     <template #page-content>
       <div class="note-view">
-        <Card class="note-view__item1" width="35rem" height="40rem">
+        <Card class="note-view__item1" width="35rem" height="45rem">
           <form @submit.prevent="handleSubmit">
             <div class="note-view__questions-title">{{ questionStore.firstQuestion }}</div>
             <textarea
@@ -156,13 +156,13 @@ onMounted(() => {
         </Card>
         <Card>
           <div class="note-view__last-note-header">
-            <div class="note-view__title">Your past notes</div>
+            <div class="note-view__headline">Your past notes</div>
             <button type="button" class="note-view__view-more-button" @click="openViewMoreModal">
               View more
             </button>
             <template v-if="isViewMoreModalOpen">
               <Modal height="500px" @close="closeModal">
-                <div class="note-view__title">Your past notes</div>
+                <div class="note-view__headline">Your past notes</div>
                 <div class="note-view__view-more-notes">
                   <NoteBlock
                     v-for="note in noteStore.notes"
@@ -246,7 +246,7 @@ onMounted(() => {
           </div>
         </Card>
         <Card>
-          <div class="note-view__title">GratiBot has thoughts</div>
+          <div class="note-view__headline">GratiBot has thoughts</div>
           <div class="note-view__gratibot-block">
             <div class="note-view__gratibot-left">
               <div class="note-view__about-text">
@@ -297,6 +297,8 @@ onMounted(() => {
   color: #e01c8b;
   font-weight: 600;
   font-size: 1.25rem;
+  margin-bottom: 15px;
+  margin-top: 25px;
 }
 
 .note-view__input {
@@ -343,11 +345,19 @@ onMounted(() => {
   justify-content: flex-end;
   align-items: center;
   gap: 1rem;
+  margin-bottom: 25px;
 }
 
 .note-view__title {
   color: #55555b;
   font-weight: 600;
+  font-size: 16px;
+}
+
+.note-view__headline {
+  color: #55555b;
+  font-weight: 600;
+  font-size: 20px;
 }
 
 .note-view__last-note-block {
@@ -476,5 +486,23 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+@media (width <= 600px) {
+  .note-view {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .note-view__questions-title, .note-view__input, .note-view__headline, .note-view__view-more-button, .note-view__question-answer, .note-view__about-text {
+    font-size: 14px;
+  }
+}
+
+@media (width <= 1200px) {
+  .note-view {
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>

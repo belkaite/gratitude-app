@@ -18,14 +18,30 @@ onMounted(() => {
       <Sidebar></Sidebar>
     </template>
     <template #page-content>
-      <div class="tip-view__layout">
-        <TipBlock v-for="tip in tipStore.tips" :key="tip.id" :tip="tip"></TipBlock>
+      <div class="tip-view">
+        <div class="tip-view__intro-text">
+          These are the gratitude tips you've unlocked so far. Revisit them any time for a boost of
+          motivation or perspective. 💧
+        </div>
+        <div class="tip-view__layout">
+          <TipBlock v-for="tip in tipStore.tips" :key="tip.id" :tip="tip"></TipBlock>
+        </div>
       </div>
     </template>
   </MainLayout>
 </template>
 
 <style scoped>
+.tip-view {
+  margin: 4rem;
+}
+
+.tip-view__intro-text {
+  color: #55555b;
+  font-weight: 600;
+  margin-bottom: 50px;
+  font-size: 18px;
+}
 .tip-view__layout {
   display: flex;
   flex-direction: row;
@@ -36,8 +52,6 @@ onMounted(() => {
   padding: 10px;
   max-width: 70vw;
   max-height: 50vw;
-  margin: 20px;
-  margin: 4rem;
 }
 
 .tip-view__layout > * {
@@ -46,5 +60,23 @@ onMounted(() => {
   width: 500px;
 }
 
+@media (width <= 600px) {
+  .tip-view__intro-text {
+    font-size: 14px;
+  }
+  .tip-view__layout {
+    display: flex;
+    flex-direction: column;
+    scroll-snap-type: y mandatory;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
 
+  .tip-view__layout > * {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  width: 500px;
+  max-width: 100%;
+}
+}
 </style>

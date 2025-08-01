@@ -19,7 +19,7 @@ defineProps<{ title: string; text: string }>()
 .feature-box {
   background-color: #e01c8b;
   border-radius: 20px;
-  height: 15rem;
+  height: 20rem;
   width: 15rem;
   font-weight: 15rem;
   flex-shrink: 0;
@@ -38,5 +38,12 @@ defineProps<{ title: string; text: string }>()
   font-size: 1rem;
   padding: 1rem 1rem;
   text-align: start;
+}
+
+@media (width <= 600px) {
+  .feature-title,
+  .feature-text {
+    font-size: 12px;
+  }
 }
 </style>
