@@ -6,7 +6,7 @@ import FeatureBox from '@/components/FeatureBox.vue'
 </script>
 
 <template>
-  <MainLayout page-title="Reminder for you, ">
+  <MainLayout page-title="Why this app exists, ">
     <template #navigation>
       <Sidebar></Sidebar>
     </template>

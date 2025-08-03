@@ -36,7 +36,7 @@ const schema = z
           return 'testsupersecretkey'
         }
         throw new Error('You must provide an AI API key in production env!')
-      })
+      }),
     }),
 
     database: z.object({

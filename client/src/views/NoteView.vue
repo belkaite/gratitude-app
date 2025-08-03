@@ -117,7 +117,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <MainLayout page-title="Grateful moments, ">
+  <MainLayout page-title="What made today worth it, ">
     <template #navigation>
       <Sidebar></Sidebar>
     </template>
