@@ -68,14 +68,25 @@ onMounted(() => {
               <NoteBlock :note="noteStore.lastNote"> </NoteBlock>
             </div>
             <div v-else>
-              <p>No note yet.</p>
+              <p class="home-view__about-text">
+                ✨ No note yet. Your latest reflection will appear here.
+              </p>
             </div>
           </Card>
         </div>
         <div>
           <Card width="35rem" height="22rem">
             <div class="home-view__title">Unlocked tips</div>
-            <div class="home-view__tips-text">{{ tipStore.lastTip?.content }}</div>
+            <div class="home-view__tips-text">
+              <div v-if="tipStore.lastTip">
+                {{ tipStore.lastTip?.content }}
+              </div>
+              <div v-else>
+                <p class="home-view__about-text">
+                  ✨ No unlocked tip yet. Each reflection brings you closer to your next insight — keep going!
+                </p>
+              </div>
+            </div>
             <RouterLink to="/tips">
               <div class="home-view__about-buttom">
                 <button>Read full</button> <img src="../assets/icons/arrow-right.svg" />
@@ -185,7 +196,8 @@ onMounted(() => {
   .home-view__labels,
   .home-view__progress-values,
   .home-view__about-text,
-  .home-view__about-buttom, .home-view__tips-text {
+  .home-view__about-buttom,
+  .home-view__tips-text {
     font-size: 14px;
   }
 }
