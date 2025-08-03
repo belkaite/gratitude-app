@@ -19,6 +19,8 @@ export const useNoteStore = defineStore('note', () => {
       answer2: secondAnswer,
     })
 
+    lastNote.value = response.note
+
     if (response.tip) {
       tip.value = response.tip
     }

@@ -24,10 +24,8 @@ onMounted(() => {
           motivation or perspective. 💧
         </div>
         <div class="tip-view__layout">
-          <div v-if="tipStore.lastTip">
-            <TipBlock v-for="tip in tipStore.tips" :key="tip.id" :tip="tip"></TipBlock>
-          </div>
-          <div class="tip-view__no-tips">
+          <TipBlock v-for="tip in tipStore.tips" :key="tip.id" :tip="tip"></TipBlock>
+          <div v-if="tipStore.tips.length === 0" class="tip-view__no-tips">
             ✨ No unlocked tip yet. Each reflection brings you closer to your next insight — keep
             going!
           </div>
@@ -71,7 +69,8 @@ onMounted(() => {
 }
 
 @media (width <= 600px) {
-  .tip-view__intro-text, .tip-view__no-tips {
+  .tip-view__intro-text,
+  .tip-view__no-tips {
     font-size: 14px;
   }
   .tip-view__layout {

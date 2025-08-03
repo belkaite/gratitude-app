@@ -154,7 +154,7 @@ onMounted(() => {
             </div>
           </form>
         </Card>
-        <Card>
+        <Card width="600px">
           <div class="note-view__last-note-header">
             <div class="note-view__headline">Your past notes</div>
             <button type="button" class="note-view__view-more-button" @click="openViewMoreModal">
@@ -164,14 +164,14 @@ onMounted(() => {
               <Modal height="500px" @close="closeModal">
                 <div class="note-view__headline">Your past notes</div>
                 <div class="note-view__view-more-notes">
-                  <div v-if="noteStore.lastNote">
-                    <NoteBlock
-                      v-for="note in noteStore.notes"
-                      :key="note.id"
-                      :note="note"
-                    ></NoteBlock>
-                  </div>
-                  <div v-else class="note-view__answer">
+                  <NoteBlock
+                    v-for="note in noteStore.notes"
+                    :key="note.id"
+                    :note="note"
+
+                    class="note_view__view-more-notes"
+                  ></NoteBlock>
+                  <div v-if="noteStore.notes.length === 0" class="note-view__answer">
                     ✨ No notes yet. This is your personal space to revisit every reflection you've
                     made.
                   </div>
@@ -271,7 +271,12 @@ onMounted(() => {
             </div>
 
             <div class="note-view__last-note-block note-view__gratibot-text">
-              {{ aiStore.aiResponse }}
+              <div v-if="aiStore.aiResponse">
+                {{ aiStore.aiResponse }}
+              </div>
+              <div v-else class="note-view__answer">
+                ✨ Your AI companion is patiently waiting to respond to your thoughts.
+              </div>
             </div>
           </div>
         </Card>
@@ -497,6 +502,11 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.note_view__view-more-notes {
+  width: 600px;
+  overflow-y: auto;
 }
 
 @media (width <= 600px) {

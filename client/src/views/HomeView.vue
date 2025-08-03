@@ -65,7 +65,7 @@ onMounted(() => {
               ></RouterLink>
             </div>
             <div v-if="noteStore.lastNote">
-              <NoteBlock :note="noteStore.lastNote"> </NoteBlock>
+              <NoteBlock :note="noteStore.lastNote" :truncate="true"> </NoteBlock>
             </div>
             <div v-else>
               <p class="home-view__about-text">
@@ -185,6 +185,8 @@ onMounted(() => {
   align-items: center;
   margin-bottom: 15px;
 }
+
+
 
 @media (width <= 600px) {
   .home-view {
