@@ -5,6 +5,7 @@ import { DEFAULT_SERVER_ERROR } from '../consts'
 import AuthPageLayout from '@/layouts/AuthPageLayout.vue'
 import { useUserStore } from '@/stores/user'
 import { getZodError } from '@/utils'
+import { TRPCClientError } from '@trpc/client'
 
 const successMessage = ref(false)
 const errorMessage = ref('')
@@ -24,11 +25,14 @@ async function submitSignUp(payload: {
 
       errorMessage.value = ''
     }
-  } catch (error: any) {
-    if (error.data?.zodError) {
-      const fieldErrors = error.data.zodError.fieldErrors as Record<string, string[]>
-
-      errorMessage.value = getZodError(fieldErrors)
+  } catch (error) {
+    if (error instanceof TRPCClientError) {
+      if (error.data?.zodError) {
+        const fieldErrors = error.data.zodError.fieldErrors as Record<string, string[]>
+        errorMessage.value = getZodError(fieldErrors)
+      } else {
+        errorMessage.value = error.message
+      }
     } else {
       errorMessage.value = error instanceof Error ? error.message : DEFAULT_SERVER_ERROR
     }

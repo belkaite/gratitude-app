@@ -24,7 +24,9 @@ async function submitLogin(payload: { email: string; password: string }) {
         const fieldErrors = error.data.zodError.fieldErrors as Record<string, string[]>
 
         errorMessage.value = getZodError(fieldErrors)
-      }
+      } else {
+      errorMessage.value = error.message
+    }
     } else {
       errorMessage.value = error instanceof Error ? error.message : DEFAULT_SERVER_ERROR
     }
