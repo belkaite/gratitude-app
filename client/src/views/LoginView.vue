@@ -2,8 +2,11 @@
 import { ref } from 'vue'
 import PageForm from '@/components/PageForm.vue'
 import AuthPageLayout from '@/layouts/AuthPageLayout.vue'
+import { DEFAULT_SERVER_ERROR } from '../consts'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { TRPCClientError } from '@trpc/client'
+import { getZodError } from '@/utils'
 
 const router = useRouter()
 
@@ -13,10 +16,20 @@ const store = useUserStore()
 
 async function submitLogin(payload: { email: string; password: string }) {
   try {
-    store.login(payload)
+    await store.login(payload)
     router.push('/home')
-  } catch (err: any) {
-    errorMessage.value = err?.message
+  } catch (error) {
+    if (error instanceof TRPCClientError) {
+      if (error.data?.zodError) {
+        const fieldErrors = error.data.zodError.fieldErrors as Record<string, string[]>
+
+        errorMessage.value = getZodError(fieldErrors)
+      } else {
+      errorMessage.value = error.message
+    }
+    } else {
+      errorMessage.value = error instanceof Error ? error.message : DEFAULT_SERVER_ERROR
+    }
   }
 }
 </script>
@@ -43,6 +56,3 @@ async function submitLogin(payload: { email: string; password: string }) {
     />
   </AuthPageLayout>
 </template>
-
-
-

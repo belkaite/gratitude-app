@@ -3,6 +3,9 @@ import { watch, ref, defineProps } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRouter } from 'vue-router'
 import Modal from '@/components/Modal.vue'
+import { getZodError } from '@/utils'
+import { TRPCClientError } from '@trpc/client'
+import { DEFAULT_SERVER_ERROR } from '../consts'
 
 const oldPassword = ref('')
 const newPassword = ref('')
@@ -29,14 +32,24 @@ async function submitPasswordChange() {
       currentPassword: oldPassword.value,
       newPassword: newPassword.value,
     })
+
     successMessage.value = message
+
     setTimeout(() => {
       successMessage.value = ''
     }, 6000)
     oldPassword.value = ''
     newPassword.value = ''
-  } catch (error: any) {
-    errorMessage.value = error?.message ?? 'Something went wrong.'
+  } catch (error) {
+    if (error instanceof TRPCClientError) {
+      if (error.data?.zodError) {
+        const fieldErrors = error.data.zodError.fieldErrors as Record<string, string[]>
+
+        errorMessage.value = getZodError(fieldErrors)
+      }
+    } else {
+      errorMessage.value = error instanceof Error ? error.message : DEFAULT_SERVER_ERROR
+    }
   }
 }
 
@@ -99,26 +112,29 @@ function logoutUser() {
                   Log out
                 </button>
                 <Modal height="500px" v-if="isPassChangeModalOpen" @close="closeModal">
-                  <label>
-                    Current password:
-                    <input v-model="oldPassword" />
-                  </label>
-                  <label>
-                    New password:
-                    <input v-model="newPassword" />
-                  </label>
-                  <button
-                    class="main_layout__submit-button"
-                    type="button"
-                    @click="submitPasswordChange"
-                  >
-                    Submit
-                  </button>
-                  <div v-if="successMessage" class="main-layout__success">
-                    {{ successMessage }}
-                  </div>
-                  <div v-else-if="errorMessage" class="main-layout__error">
-                    {{ errorMessage }}
+                  <div class="main_layout__changepass">
+                    <div class="main_layout__changepass-title">Change password</div>
+                    <label class="main_layout__changepass-label">
+                      Current password:
+                      <input class="main_layout__changepass-fields" v-model="oldPassword" />
+                    </label>
+                    <label class="main_layout__changepass-label">
+                      New password:
+                      <input class="main_layout__changepass-fields" v-model="newPassword" />
+                    </label>
+                    <button
+                      class="main_layout__submit-button"
+                      type="button"
+                      @click="submitPasswordChange"
+                    >
+                      Submit
+                    </button>
+                    <div v-if="successMessage" class="main-layout__success">
+                      {{ successMessage }}
+                    </div>
+                    <div v-else-if="errorMessage" class="main-layout__error">
+                      {{ errorMessage }}
+                    </div>
                   </div>
                 </Modal>
               </div>
@@ -247,6 +263,26 @@ function logoutUser() {
   margin-block: 1rem;
   height: 2.5rem;
   cursor: pointer;
+}
+
+.main_layout__changepass-label {
+  color: #55555b;
+}
+
+.main_layout__changepass-fields {
+  border: 2px solid;
+  color: #94949b;
+  padding: 0.5rem;
+  border-radius: 10px;
+  border-color: #dfdfdf;
+}
+
+.main_layout__changepass {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: cenetr;
 }
 
 @media (width <= 600px) {

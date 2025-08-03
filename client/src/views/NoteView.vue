@@ -154,7 +154,7 @@ onMounted(() => {
             </div>
           </form>
         </Card>
-        <Card>
+        <Card width="600px">
           <div class="note-view__last-note-header">
             <div class="note-view__headline">Your past notes</div>
             <button type="button" class="note-view__view-more-button" @click="openViewMoreModal">
@@ -168,80 +168,91 @@ onMounted(() => {
                     v-for="note in noteStore.notes"
                     :key="note.id"
                     :note="note"
+
+                    class="note_view__view-more-notes"
                   ></NoteBlock>
+                  <div v-if="noteStore.notes.length === 0" class="note-view__answer">
+                    ✨ No notes yet. This is your personal space to revisit every reflection you've
+                    made.
+                  </div>
                 </div>
               </Modal>
             </template>
           </div>
           <div class="note-view__last-note-block">
-            <div class="note-view__question-answer">
-              <div class="note-view__date">
-                {{ noteStore.lastNote?.createdAt.toDateString().slice(4) }}
+            <div v-if="noteStore.lastNote">
+              <div class="note-view__question-answer">
+                <div class="note-view__date">
+                  {{ noteStore.lastNote?.createdAt.toDateString().slice(4) }}
+                </div>
+                <div class="note-view__title">{{ noteStore.lastNote?.question1 }}</div>
+                <div class="font-handwritten note-view__answer">
+                  <template v-if="isEdting">
+                    <textarea
+                      v-model="editedAnswer1"
+                      class="note-view__input"
+                      maxlength="500"
+                    ></textarea>
+                  </template>
+                  <template v-else>
+                    {{ noteStore.lastNote?.answer1 }}
+                  </template>
+                </div>
               </div>
-              <div class="note-view__title">{{ noteStore.lastNote?.question1 }}</div>
-              <div class="font-handwritten note-view__answer">
+              <div class="note-view__question-answer">
+                <div class="note-view__title">{{ noteStore.lastNote?.question2 }}</div>
+                <div class="font-handwritten note-view__answer">
+                  <template v-if="isEdting">
+                    <textarea
+                      v-model="editedAnswer2"
+                      class="note-view__input"
+                      maxlength="500"
+                    ></textarea>
+                  </template>
+                  <template v-else>
+                    {{ noteStore.lastNote?.answer2 }}
+                  </template>
+                </div>
+              </div>
+              <div class="note-view__buttons">
                 <template v-if="isEdting">
-                  <textarea
-                    v-model="editedAnswer1"
-                    class="note-view__input"
-                    maxlength="500"
-                  ></textarea>
-                </template>
+                  <button type="button" class="note-view__delete-button" @click="cancelEdit">
+                    Cancel
+                  </button>
+                  <button type="button" class="note-view__edit-button" @click="saveEdit">
+                    Save
+                  </button></template
+                >
                 <template v-else>
-                  {{ noteStore.lastNote?.answer1 }}
+                  <button type="button" class="note-view__delete-button" @click="openDeleteModal">
+                    Delete
+                  </button>
+                  <button type="button" class="note-view__edit-button" @click="startEditing">
+                    Edit
+                  </button>
+                </template>
+                <div v-if="editSuccessMessage" class="note-view__success">
+                  {{ editSuccessMessage }}
+                </div>
+                <template v-if="isDeleteModalOpen">
+                  <Modal height="200px" @close="closeModal">
+                    <div class="note-view__title">
+                      Are you sure that you would like to delete the latest note?
+                    </div>
+                    <div class="note-view__buttons">
+                      <button type="button" class="note-view__delete-button" @click="closeModal">
+                        No
+                      </button>
+                      <button type="button" class="note-view__edit-button" @click="deleteNote">
+                        Yes
+                      </button>
+                    </div>
+                  </Modal>
                 </template>
               </div>
             </div>
-            <div class="note-view__question-answer">
-              <div class="note-view__title">{{ noteStore.lastNote?.question2 }}</div>
-              <div class="font-handwritten note-view__answer">
-                <template v-if="isEdting">
-                  <textarea
-                    v-model="editedAnswer2"
-                    class="note-view__input"
-                    maxlength="500"
-                  ></textarea>
-                </template>
-                <template v-else>
-                  {{ noteStore.lastNote?.answer2 }}
-                </template>
-              </div>
-            </div>
-            <div class="note-view__buttons">
-              <template v-if="isEdting">
-                <button type="button" class="note-view__delete-button" @click="cancelEdit">
-                  Cancel
-                </button>
-                <button type="button" class="note-view__edit-button" @click="saveEdit">
-                  Save
-                </button></template
-              >
-              <template v-else>
-                <button type="button" class="note-view__delete-button" @click="openDeleteModal">
-                  Delete
-                </button>
-                <button type="button" class="note-view__edit-button" @click="startEditing">
-                  Edit
-                </button>
-              </template>
-              <div v-if="editSuccessMessage" class="note-view__success">
-                {{ editSuccessMessage }}
-              </div>
-              <template v-if="isDeleteModalOpen">
-                <Modal height="200px" @close="closeModal">
-                  <div class="note-view__title">
-                    Are you sure that you would like to delete the latest note?
-                  </div>
-                  <div class="note-view__buttons">
-                    <button type="button" class="note-view__delete-button" @click="closeModal">
-                      No
-                    </button>
-                    <button type="button" class="note-view__edit-button" @click="deleteNote">
-                      Yes
-                    </button>
-                  </div>
-                </Modal>
-              </template>
+            <div v-else class="note-view__answer">
+              ✨ No note yet. Your latest reflection will appear here.
             </div>
           </div>
         </Card>
@@ -260,7 +271,12 @@ onMounted(() => {
             </div>
 
             <div class="note-view__last-note-block note-view__gratibot-text">
-              {{ aiStore.aiResponse }}
+              <div v-if="aiStore.aiResponse">
+                {{ aiStore.aiResponse }}
+              </div>
+              <div v-else class="note-view__answer">
+                ✨ Your AI companion is patiently waiting to respond to your thoughts.
+              </div>
             </div>
           </div>
         </Card>
@@ -488,13 +504,23 @@ onMounted(() => {
   align-items: center;
 }
 
+.note_view__view-more-notes {
+  width: 600px;
+  overflow-y: auto;
+}
+
 @media (width <= 600px) {
   .note-view {
     display: flex;
     flex-direction: column;
   }
 
-  .note-view__questions-title, .note-view__input, .note-view__headline, .note-view__view-more-button, .note-view__question-answer, .note-view__about-text {
+  .note-view__questions-title,
+  .note-view__input,
+  .note-view__headline,
+  .note-view__view-more-button,
+  .note-view__question-answer,
+  .note-view__about-text {
     font-size: 14px;
   }
 }

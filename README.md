@@ -1,5 +1,7 @@
 # Gratitude App
 
+📍 Deployed link: https://grati.14vxhfgk1ffnm.eu-central-1.cs.amazonlightsail.com/login
+
 ## About
 
 Gratitude is a scientifically proven thing that helps improve well being. Instead of writing in a physical journal, decided to create a digital version of gratitude journal.
