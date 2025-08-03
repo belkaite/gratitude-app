@@ -13,7 +13,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <MainLayout page-title="Science based tips for you, ">
+  <MainLayout page-title="Tips backed by science, ">
     <template #navigation>
       <Sidebar></Sidebar>
     </template>

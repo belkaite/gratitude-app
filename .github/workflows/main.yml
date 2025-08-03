@@ -187,7 +187,7 @@ jobs:
               "environment": {
                 "NODE_ENV": "production",
                 "PORT": "3000",
-                "DATABASE_URL": "${{ secrets.DATABASE_URL }}",
+                "DATABASE_URL": "${{ secrets.DATABASE_URL_NEON }}",
                 "TOKEN_KEY": "${{ secrets.TOKEN_KEY }}",
                 "TOKEN_EXPIRES_IN": "${{ secrets.TOKEN_EXPIRES_IN }}",
                 "PASSWORD_COST": "${{ secrets.PASSWORD_COST }}",
