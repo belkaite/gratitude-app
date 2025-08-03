@@ -72,6 +72,12 @@ npm run dev -w server
 npm test -w server
 ```
 
+```bash
+
+# e2e tests
+npm run test:e2e -w=client
+```
+
 ## Migrations
 
 ```bash
