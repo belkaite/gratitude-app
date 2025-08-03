@@ -1,7 +1,5 @@
 name: gratitude-app-workflow
 
-
-
 on: push
 
 jobs:
@@ -45,7 +43,6 @@ jobs:
       - name: Lint client
         run: npm run lint -w=client
 
-
       - name: Database migrations
         run: npm run migrate:latest -w=server
 
@@ -71,8 +68,7 @@ jobs:
           retry-delay: 5s
           url: ${{ env.VITE_API_ORIGIN }}/api/health
 
-
-    -  name: Wait for frontend to startup
+      - name: Wait for frontend to startup
         uses: Jtalk/url-health-check-action@v4
         with:
           max-attempts: 10
