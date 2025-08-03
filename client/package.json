@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@mono/server": "^1.0.0",
-    "@playwright/test": "^1.42.1",
+    "@playwright/test": "^1.54.2",
     "@rushstack/eslint-patch": "^1.10.1",
     "@tsconfig/node20": "^20.1.4",
     "@types/chance": "^1.1.6",
